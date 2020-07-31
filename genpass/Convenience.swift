@@ -8,6 +8,16 @@
 
 import Foundation
 
+func warning(_ description: String) {
+    print(description)
+}
+
+func error(_ description: String? = nil, returnValue: Int32 = -1) -> Never {
+    if description != nil { print(description!) }
+    advertiseUsage()
+    exit(returnValue)
+}
+
 extension Array {
     
     /**

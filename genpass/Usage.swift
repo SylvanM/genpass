@@ -8,6 +8,9 @@
 
 import Foundation
 
+func advertiseUsage() {
+    print("Use genpass -h or genpass --help to see usage")
+}
 
 func printUsage() {
     
@@ -26,13 +29,13 @@ func printUsage() {
     print()
     print("Will generate a random password 12 characters in length.")
     print()
-    print("Some sites and services prohibit the use of certain characters in your password. In order to tell genpass to not include specific characters, list all the illegal characters following the '-x' or '--except' option. For example:")
+    print("Some sites and services prohibit the use of certain characters in your password. In order to tell genpass to not include specific characters, list all the illegal characters in a single argument following the '-x' or '--except' option. For example:")
     print()
-    print("\tgenpass -x ~ _ / ? !")
+    print("\tgenpass -x ~_/?!")
     print()
     print("Will give you a password that does not contain a '~', '_', '/', '?', or '!'. If you want to specify the length of the password AND illegal characters, you must put the length before the illegal characters. This is done so that we don't mistake the length for one of the characters you don't want to see. For example:")
     print()
-    print("\tgenpass 12 -x ~ _ / ? !")
+    print("\tgenpass 12 -x ~_/?!")
     print()
     print("Will give you a 12 digit character without any of those characters.")
     print()
