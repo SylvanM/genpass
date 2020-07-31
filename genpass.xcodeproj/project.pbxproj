@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE2B2B7024D39DD20096EBA4 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2B2B6F24D39DD20096EBA4 /* Convenience.swift */; };
+		AE2B2B7224D39DE20096EBA4 /* Usage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2B2B7124D39DE20096EBA4 /* Usage.swift */; };
 		AE75767224B762A60098CEF8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE75767124B762A60098CEF8 /* main.swift */; };
+		AE75767924B763CA0098CEF8 /* PasswordGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE75767824B763CA0098CEF8 /* PasswordGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +26,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AE2B2B6F24D39DD20096EBA4 /* Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
+		AE2B2B7124D39DE20096EBA4 /* Usage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usage.swift; sourceTree = "<group>"; };
 		AE75766E24B762A60098CEF8 /* genpass */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genpass; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE75767124B762A60098CEF8 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		AE75767824B763CA0098CEF8 /* PasswordGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,9 @@
 			isa = PBXGroup;
 			children = (
 				AE75767124B762A60098CEF8 /* main.swift */,
+				AE75767824B763CA0098CEF8 /* PasswordGenerator.swift */,
+				AE2B2B6F24D39DD20096EBA4 /* Convenience.swift */,
+				AE2B2B7124D39DE20096EBA4 /* Usage.swift */,
 			);
 			path = genpass;
 			sourceTree = "<group>";
@@ -120,7 +129,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE75767924B763CA0098CEF8 /* PasswordGenerator.swift in Sources */,
+				AE2B2B7024D39DD20096EBA4 /* Convenience.swift in Sources */,
 				AE75767224B762A60098CEF8 /* main.swift in Sources */,
+				AE2B2B7224D39DE20096EBA4 /* Usage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
