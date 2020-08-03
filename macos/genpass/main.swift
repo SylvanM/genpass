@@ -103,9 +103,6 @@ if let firstParam = args[safe: 1] {
             }
         }
     }
-    
-    
-    
 }
 
 var password: String = ""

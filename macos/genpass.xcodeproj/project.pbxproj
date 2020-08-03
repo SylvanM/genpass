@@ -11,7 +11,7 @@
 		AE6A265A24D7B0DE00CE3401 /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265224D7B0DE00CE3401 /* Generator.swift */; };
 		AE6A265B24D7B0DE00CE3401 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265324D7B0DE00CE3401 /* Convenience.swift */; };
 		AE6A265C24D7B0DE00CE3401 /* Usage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265424D7B0DE00CE3401 /* Usage.swift */; };
-		AE6A265D24D7B0DE00CE3401 /* drng.c in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265824D7B0DE00CE3401 /* drng.c */; };
+		AE6A266124D8A5BE00CE3401 /* drng.c in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265F24D8A5BE00CE3401 /* drng.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,9 +31,9 @@
 		AE6A265224D7B0DE00CE3401 /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
 		AE6A265324D7B0DE00CE3401 /* Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		AE6A265424D7B0DE00CE3401 /* Usage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Usage.swift; sourceTree = "<group>"; };
-		AE6A265724D7B0DE00CE3401 /* drng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drng.h; sourceTree = "<group>"; };
-		AE6A265824D7B0DE00CE3401 /* drng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = drng.c; sourceTree = "<group>"; };
 		AE6A265E24D7B10900CE3401 /* genpass-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "genpass-Bridging-Header.h"; sourceTree = "<group>"; };
+		AE6A265F24D8A5BE00CE3401 /* drng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = drng.c; path = ../../../drng/drng.c; sourceTree = "<group>"; };
+		AE6A266024D8A5BE00CE3401 /* drng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = drng.h; path = ../../../drng/drng.h; sourceTree = "<group>"; };
 		AE75766E24B762A60098CEF8 /* genpass */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genpass; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -61,8 +61,8 @@
 		AE6A265624D7B0DE00CE3401 /* drng */ = {
 			isa = PBXGroup;
 			children = (
-				AE6A265724D7B0DE00CE3401 /* drng.h */,
-				AE6A265824D7B0DE00CE3401 /* drng.c */,
+				AE6A265F24D8A5BE00CE3401 /* drng.c */,
+				AE6A266024D8A5BE00CE3401 /* drng.h */,
 			);
 			path = drng;
 			sourceTree = "<group>";
@@ -153,7 +153,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE6A265D24D7B0DE00CE3401 /* drng.c in Sources */,
+				AE6A266124D8A5BE00CE3401 /* drng.c in Sources */,
 				AE6A265924D7B0DE00CE3401 /* main.swift in Sources */,
 				AE6A265B24D7B0DE00CE3401 /* Convenience.swift in Sources */,
 				AE6A265A24D7B0DE00CE3401 /* Generator.swift in Sources */,
