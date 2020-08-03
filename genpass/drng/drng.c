@@ -28,11 +28,5 @@ int rdrand(unsigned long *rand) {
 }
 
 int rdrand_byte(unsigned char *rand) {
-    unsigned char ok;
-    unsigned short *larger = (unsigned short *)rand;
-
-    asm volatile ("rdrand %0; setc %1"
-        : "=r" (larger), "=qm" (ok));
-
-    return (int) ok;
+    return rdrand( (unsigned long *) rand );
 }

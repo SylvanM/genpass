@@ -22,6 +22,11 @@ class Generator {
      */
     var passwordLength: Int
     
+    /**
+     * Wether or not the generated password should only be alphanumeric
+     */
+    var alphaNumeric: Bool = false
+    
     // MARK: Initializers
     
     init(excluding: [Character], ofLength length: Int = 16) {
@@ -52,18 +57,36 @@ class Generator {
         
         var bytes = Array( UnsafeMutableBufferPointer<UInt8>(start: byteBuffer, count: byteCount) )
         
-        
+        // I'm worreid that my conversion from a byte to a character is not secure.
+        // By using the modulo operator some characters would be more likely than others.
+        //
+        // I can't think of a good way to convert the random data to a valid character
         var characters: [Character] {
             bytes.map {
-                Character(UnicodeScalar( ($0 % 90) + 32 ))
+                
+                if alphaNumeric {
+                    
+                    // we are only choosing between 62 total characters, which is close to 64 characters, so we only care about the last 6 bits of the byte.
+                    let bits = $0 % 62
+                    
+                    // map the 0-61 value to a valid ascii character
+                    return Character(UnicodeScalar(
+                        bits < 10 ? bits + 48 : ( bits < 36 ? bits + 55 : bits + 61 )
+                    ))
+                    
+                }
+                
+                return Character(UnicodeScalar( ($0 % 90) + 33 ))
             }
         }
 
-        // make sure that, if we made any illegal characters, we fix that.
-        if forbiddenCharacters.count != 0 {
-            for i in 0..<passwordLength {
-                while forbiddenCharacters.contains(characters[i]) {
-                    rdrand_byte(&bytes[i])
+        if !alphaNumeric {
+            // make sure that, if we made any illegal characters, we fix that.
+            if forbiddenCharacters.count != 0 {
+                for i in 0..<passwordLength {
+                    while forbiddenCharacters.contains(characters[i]) {
+                        rdrand_byte(&bytes[i])
+                    }
                 }
             }
         }

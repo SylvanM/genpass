@@ -69,28 +69,42 @@ if let firstParam = args[safe: 1] {
         
     }
     
-    // where we will look for the user specifying illegal characters. This is usually the first parameter, UNLESS the user has entered a password length before it.
-    var illegalFlagExpectedIndex = 1
-    
-    // If the user is specifying a specific password length, then the first parameter should be that length
-    if let passwordLength = Int(firstParam) {
-        illegalFlagExpectedIndex += 1 // we check the NEXT argument for illegal characters, since this argument is specifying password length
-        generator.passwordLength = passwordLength
-    }
-    
-    if let nextParam = args[safe: illegalFlagExpectedIndex] {
-        if nextParam == "-x" || nextParam == "--except" {
-            
-            guard argc >= 2 + illegalFlagExpectedIndex else {
-                error("Sorry, you must specify some characters to forbid from being in the password. No characters were specified after \(nextParam) flag.")
+    // check for alphanumeric flag
+    if args.contains("-a") || args.contains("--alphanumeric") {
+        
+        // make sure the user isn't also trying to exclude other characters as well
+        if args.contains("-x") || args.contains("--except") {
+            error("You cannot exclude characters and also generate an only alphanumeric password.")
+        }
+        
+        generator.alphaNumeric = true
+    } else {
+        
+        // where we will look for the user specifying illegal characters. This is usually the first parameter, UNLESS the user has entered a password length before it.
+        var illegalFlagExpectedIndex = 1
+        
+        // If the user is specifying a specific password length, then the first parameter should be that length
+        if let passwordLength = Int(firstParam) {
+            illegalFlagExpectedIndex += 1 // we check the NEXT argument for illegal characters, since this argument is specifying password length
+            generator.passwordLength = passwordLength
+        }
+        
+        if let nextParam = args[safe: illegalFlagExpectedIndex] {
+            if nextParam == "-x" || nextParam == "--except" {
+                
+                guard argc >= 2 + illegalFlagExpectedIndex else {
+                    error("Sorry, you must specify some characters to forbid from being in the password. No characters were specified after \(nextParam) flag.")
+                }
+                
+                generator.forbiddenCharacters = Array(args[1 + illegalFlagExpectedIndex])
+                
+            } else {
+                error("Unrecognized option \(nextParam)")
             }
-            
-            generator.forbiddenCharacters = Array(args[1 + illegalFlagExpectedIndex])
-            
-        } else {
-            error("Unrecognized option \(nextParam)")
         }
     }
+    
+    
     
 }
 
