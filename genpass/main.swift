@@ -18,6 +18,7 @@ import Foundation
 
 let generator = Generator(excluding: [], ofLength: 16)
 
+
 if let firstParam = args[safe: 1] {
     
     if firstParam == "-h" || firstParam == "--help" {

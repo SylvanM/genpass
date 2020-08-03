@@ -9,6 +9,7 @@
 import Foundation
 
 func warning(_ description: String) {
+    // might do something different with this later, like use some unicode tricks to print it in yellow or something
     print(description)
 }
 

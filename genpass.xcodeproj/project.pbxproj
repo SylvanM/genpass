@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AE2B2B7024D39DD20096EBA4 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2B2B6F24D39DD20096EBA4 /* Convenience.swift */; };
-		AE2B2B7224D39DE20096EBA4 /* Usage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2B2B7124D39DE20096EBA4 /* Usage.swift */; };
-		AE75767224B762A60098CEF8 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE75767124B762A60098CEF8 /* main.swift */; };
-		AE75767924B763CA0098CEF8 /* PasswordGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE75767824B763CA0098CEF8 /* PasswordGenerator.swift */; };
+		AE6A265924D7B0DE00CE3401 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265024D7B0DD00CE3401 /* main.swift */; };
+		AE6A265A24D7B0DE00CE3401 /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265224D7B0DE00CE3401 /* Generator.swift */; };
+		AE6A265B24D7B0DE00CE3401 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265324D7B0DE00CE3401 /* Convenience.swift */; };
+		AE6A265C24D7B0DE00CE3401 /* Usage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265424D7B0DE00CE3401 /* Usage.swift */; };
+		AE6A265D24D7B0DE00CE3401 /* drng.c in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265824D7B0DE00CE3401 /* drng.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,11 +27,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AE2B2B6F24D39DD20096EBA4 /* Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
-		AE2B2B7124D39DE20096EBA4 /* Usage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Usage.swift; sourceTree = "<group>"; };
+		AE6A265024D7B0DD00CE3401 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		AE6A265224D7B0DE00CE3401 /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
+		AE6A265324D7B0DE00CE3401 /* Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
+		AE6A265424D7B0DE00CE3401 /* Usage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Usage.swift; sourceTree = "<group>"; };
+		AE6A265724D7B0DE00CE3401 /* drng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drng.h; sourceTree = "<group>"; };
+		AE6A265824D7B0DE00CE3401 /* drng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = drng.c; sourceTree = "<group>"; };
+		AE6A265E24D7B10900CE3401 /* genpass-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "genpass-Bridging-Header.h"; sourceTree = "<group>"; };
 		AE75766E24B762A60098CEF8 /* genpass */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genpass; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE75767124B762A60098CEF8 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		AE75767824B763CA0098CEF8 /* PasswordGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +48,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AE6A265124D7B0DE00CE3401 /* Swift Interface */ = {
+			isa = PBXGroup;
+			children = (
+				AE6A265224D7B0DE00CE3401 /* Generator.swift */,
+				AE6A265324D7B0DE00CE3401 /* Convenience.swift */,
+				AE6A265424D7B0DE00CE3401 /* Usage.swift */,
+			);
+			path = "Swift Interface";
+			sourceTree = "<group>";
+		};
+		AE6A265624D7B0DE00CE3401 /* drng */ = {
+			isa = PBXGroup;
+			children = (
+				AE6A265724D7B0DE00CE3401 /* drng.h */,
+				AE6A265824D7B0DE00CE3401 /* drng.c */,
+			);
+			path = drng;
+			sourceTree = "<group>";
+		};
 		AE75766524B762A60098CEF8 = {
 			isa = PBXGroup;
 			children = (
@@ -63,10 +86,10 @@
 		AE75767024B762A60098CEF8 /* genpass */ = {
 			isa = PBXGroup;
 			children = (
-				AE75767124B762A60098CEF8 /* main.swift */,
-				AE75767824B763CA0098CEF8 /* PasswordGenerator.swift */,
-				AE2B2B6F24D39DD20096EBA4 /* Convenience.swift */,
-				AE2B2B7124D39DE20096EBA4 /* Usage.swift */,
+				AE6A265E24D7B10900CE3401 /* genpass-Bridging-Header.h */,
+				AE6A265024D7B0DD00CE3401 /* main.swift */,
+				AE6A265624D7B0DE00CE3401 /* drng */,
+				AE6A265124D7B0DE00CE3401 /* Swift Interface */,
 			);
 			path = genpass;
 			sourceTree = "<group>";
@@ -98,11 +121,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 1160;
 				ORGANIZATIONNAME = "Sylvan Martin";
 				TargetAttributes = {
 					AE75766D24B762A60098CEF8 = {
 						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1160;
 					};
 				};
 			};
@@ -129,10 +153,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE75767924B763CA0098CEF8 /* PasswordGenerator.swift in Sources */,
-				AE2B2B7024D39DD20096EBA4 /* Convenience.swift in Sources */,
-				AE75767224B762A60098CEF8 /* main.swift in Sources */,
-				AE2B2B7224D39DE20096EBA4 /* Usage.swift in Sources */,
+				AE6A265D24D7B0DE00CE3401 /* drng.c in Sources */,
+				AE6A265924D7B0DE00CE3401 /* main.swift in Sources */,
+				AE6A265B24D7B0DE00CE3401 /* Convenience.swift in Sources */,
+				AE6A265A24D7B0DE00CE3401 /* Generator.swift in Sources */,
+				AE6A265C24D7B0DE00CE3401 /* Usage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,10 +280,19 @@
 		AE75767624B762A60098CEF8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JDSTZ7K2MV;
 				ENABLE_HARDENED_RUNTIME = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "genpass/genpass-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -266,10 +300,18 @@
 		AE75767724B762A60098CEF8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JDSTZ7K2MV;
 				ENABLE_HARDENED_RUNTIME = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "genpass/genpass-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
