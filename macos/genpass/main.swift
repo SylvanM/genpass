@@ -72,6 +72,8 @@ if let firstParam = args[safe: 1] {
     // check for alphanumeric flag
     if args.contains("-a") || args.contains("--alphanumeric") {
         
+        generator.passwordLength = Int(firstParam) ?? 16
+        
         // make sure the user isn't also trying to exclude other characters as well
         if args.contains("-x") || args.contains("--except") {
             error("You cannot exclude characters and also generate an only alphanumeric password.")

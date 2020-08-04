@@ -7,6 +7,8 @@
 //
 
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "utility.h"
 #include "genpass.h"
@@ -16,10 +18,13 @@ int main(int argc, char const *argv[])
     int passlen = 16;
     int alphnum = 0;
 
+    // the argument index we expect to see the first option flag, be it -a or -x
+    int expectedFlagIndex = 1;
+
     unsigned long num, lower, upper;
 
     unsigned char *pass;
-    unsigned char *forbidden_chars;
+    unsigned char *forbidden_chars = { 0 };
 
     lower = 0;
     upper = ~lower;
@@ -42,13 +47,37 @@ int main(int argc, char const *argv[])
                 lower = strtoul(argv[2], NULL, strlen(argv[2]));
                 upper = strtoul(argv[2], NULL, strlen(argv[2]));
 
+                if (upper < lower)
+                    error("The upper bound must be greater than or equal to the lower bound.", -1);
+
             }
 
             randnum(&num, lower, upper);
+            printf("%lu\n", num);
             exit(0);
 
         }
 
+        if ( (passlen = atoi(argv[1])) )
+            expectedFlagIndex++;
+        else
+            passlen = 16;
+        
+        
+        if (expectedFlagIndex < argc) {
+            if ( strcmp(argv[expectedFlagIndex], "-a") * strcmp(argv[expectedFlagIndex], "--alphanumeric") == 0 ) {
+                alphnum = 1;
+            } else if ( strcmp(argv[expectedFlagIndex], "-x") * strcmp(argv[expectedFlagIndex], "--except") == 0 ) {
+
+                if (argc < expectedFlagIndex + 2)
+                    error("Please enter some evil characters to exclude.", -1);
+
+                forbidden_chars = (unsigned char *) argv[expectedFlagIndex + 1];
+            } else {
+                error( "Unrecognized argument.", -1 );
+            }
+        }
+    
     }
 
     pass = (unsigned char *) malloc(passlen + 1);

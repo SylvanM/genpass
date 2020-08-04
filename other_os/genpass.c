@@ -10,12 +10,14 @@
 
 int genpass(unsigned char *pass, int passlen, unsigned char *forbidden_chars, int alphanum) {
     // find how many words we need to generate
-    int i, j, wordcount = (passlen / sizeof(size_t)) + (passlen % sizeof(size_t) ? 1 : 0);
+    int i, wordcount = (passlen / sizeof(size_t)) + (passlen % sizeof(size_t) ? 1 : 0);
     rdrand_bytes(pass, wordcount);
 
     if (alphanum) {
 
         for ( i = 0; i < passlen; ++i ) {
+            pass[i] %= 62;
+
             if (pass[i] < 10) {
                 pass[i] += 48;
             } else if (pass[i] < 36) {
@@ -40,14 +42,18 @@ int genpass(unsigned char *pass, int passlen, unsigned char *forbidden_chars, in
     // null terminate string
     pass[passlen] = 0;
 
+    return 1;
+
 }
 
 int randnum(unsigned long *num, unsigned long lower, unsigned long upper) {
 
-    rdrand(num);
+    int err = rdrand(num);
 
     *num %= upper - lower + 1;
     *num += lower;
+
+    return err;
 
 }
 

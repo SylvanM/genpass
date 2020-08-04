@@ -6,6 +6,9 @@
 //  Copyright © 2020 Sylvan Martin. All rights reserved.
 //
 
+#ifndef genpass_h
+#define genpass_h
+
 #include "../drng/drng.h"
 
 #define BYTE_TO_ASCII_CHAR(b) ( (b % 90) + 33 )
@@ -24,3 +27,5 @@ int randnum(unsigned long *num, unsigned long lower, unsigned long upper);
  * Checks whether a character is forbidden
  */
 int isIllegal(unsigned char c, unsigned char *forbidden_chars);
+
+#endif
