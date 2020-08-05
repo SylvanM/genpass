@@ -9,13 +9,13 @@
 #include "drng.h"
 
 void rdrand_bytes(unsigned char *bytes, size_t len) {
-    
+
     size_t i;
     unsigned long *words = (unsigned long *) bytes;
-    
+
     for ( i = 0; i < len; ++i )
         rdrand(words++);
-    
+
 }
 
 int rdrand(unsigned long *rand) {
@@ -25,6 +25,7 @@ int rdrand(unsigned long *rand) {
         : "=r" (*rand), "=qm" (ok));
 
     return (int) ok;
+
 }
 
 int rdrand_byte(unsigned char *rand) {
