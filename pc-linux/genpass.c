@@ -31,8 +31,8 @@ int genpass(unsigned char *pass, int passlen, unsigned char *forbidden_chars, in
 
         for ( i = 0; i < passlen; ++i ) {
             while (isIllegal(BYTE_TO_ASCII_CHAR(pass[i]), forbidden_chars))
-                rdrand_byte(pass + i);
-            
+                rdrand_byte(pass + i); // should I just use &pass[i] instead?
+
             pass[i] %= 90;
             pass[i] += 33;
         }
@@ -63,4 +63,3 @@ int isIllegal(unsigned char c, unsigned char *forbidden_chars) {
             return 1;
     return 0;
 }
-
