@@ -1,0 +1,3242 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 24 24 571 818
+%%Title: Enscript Output
+%%For: Sylvan Martin
+%%Creator: GNU Enscript 1.6.6
+%%CreationDate: Sat Aug  8 17:36:32 2020
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: A4 595 842 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 6
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 6
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 10 10 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [595 842] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-simple 1.6 6
+
+/do_header {	% print default simple header
+  gsave
+    d_header_x d_header_y HFpt_h 3 div add translate
+
+    HF setfont
+    user_header_p {
+      5 0 moveto user_header_left_str show
+
+      d_header_w user_header_center_str stringwidth pop sub 2 div
+      0 moveto user_header_center_str show
+
+      d_header_w user_header_right_str stringwidth pop sub 5 sub
+      0 moveto user_header_right_str show
+    } {
+      5 0 moveto fname show
+      45 0 rmoveto fmodstr show
+      45 0 rmoveto pagenumstr show
+    } ifelse
+
+  grestore
+} def
+%%EndResource
+/d_page_w 794 def
+/d_page_h 547 def
+/d_header_x 0 def
+/d_header_y 532 def
+/d_header_w 794 def
+/d_header_h 15 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 794 def
+/d_footer_h 0 def
+/d_output_w 794 def
+/d_output_h 532 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (crypto/aes/aes.c) def
+/fdir (crypto/aes) def
+/ftail (aes.c) def
+% User defined strings:
+/fmodstr (Sat Aug 08 17:35:55 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  aes.c) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 8/6/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(#include "aes.h") s
+24 420 M (10:) s
+24 409 M (11:) s
+48 409 M
+(// MARK: - Intel Code) s
+24 398 M (12:) s
+24 387 M (13:) s
+48 387 M
+(inline void KEY_256_ASSIST_1\(__m128i *temp1, __m128i *temp2\) {) s
+24 376 M (14:) s
+48 376 M
+(    ) s
+24 365 M (15:) s
+48 365 M
+(    __m128i temp4;) s
+24 354 M (16:) s
+48 354 M
+(    *temp2 = _mm_shuffle_epi32 \(*temp2, 0xff\);) s
+24 343 M (17:) s
+48 343 M
+(    temp4 = _mm_slli_si128 \(*temp1, 0x4\);) s
+24 332 M (18:) s
+48 332 M
+(    *temp1 = _mm_xor_si128 \(*temp1, temp4\);) s
+24 321 M (19:) s
+48 321 M
+(    temp4 = _mm_slli_si128 \(temp4, 0x4\);) s
+24 310 M (20:) s
+48 310 M
+(    *temp1 = _mm_xor_si128 \(*temp1, temp4\);) s
+24 299 M (21:) s
+48 299 M
+(    temp4 = _mm_slli_si128 \(temp4, 0x4\);) s
+24 288 M (22:) s
+48 288 M
+(    *temp1 = _mm_xor_si128 \(*temp1, temp4\);) s
+24 277 M (23:) s
+48 277 M
+(    *temp1 = _mm_xor_si128 \(*temp1, *temp2\);) s
+24 266 M (24:) s
+48 266 M
+(    ) s
+24 255 M (25:) s
+48 255 M
+(}) s
+24 244 M (26:) s
+24 233 M (27:) s
+48 233 M
+(inline void KEY_256_ASSIST_2\(__m128i *temp1, __m128i *temp3\) {) s
+24 222 M (28:) s
+48 222 M
+(    ) s
+24 211 M (29:) s
+48 211 M
+(    __m128i temp2, temp4;) s
+24 200 M (30:) s
+48 200 M
+(    temp4 = _mm_aeskeygenassist_si128\(*temp1, 0x0\);) s
+24 189 M (31:) s
+48 189 M
+(    temp2 = _mm_shuffle_epi32\(temp4, 0xaa\);) s
+24 178 M (32:) s
+48 178 M
+(    temp4 = _mm_slli_si128 \(*temp3, 0x4\);) s
+24 167 M (33:) s
+48 167 M
+(    *temp3 = _mm_xor_si128 \(*temp3, temp4\);) s
+24 156 M (34:) s
+48 156 M
+(    temp4 = _mm_slli_si128 \(temp4, 0x4\);) s
+24 145 M (35:) s
+48 145 M
+(    *temp3 = _mm_xor_si128 \(*temp3, temp4\);) s
+24 134 M (36:) s
+48 134 M
+(    temp4 = _mm_slli_si128 \(temp4, 0x4\);) s
+24 123 M (37:) s
+48 123 M
+(    *temp3 = _mm_xor_si128 \(*temp3, temp4\);) s
+24 112 M (38:) s
+48 112 M
+(    *temp3 = _mm_xor_si128 \(*temp3, temp2\);) s
+24 101 M (39:) s
+48 101 M
+(    ) s
+24 90 M (40:) s
+48 90 M
+(}) s
+24 79 M (41:) s
+24 68 M (42:) s
+48 68 M
+(void AES_256_Key_Expansion \(const uint64_t *userkey, __m128i *key\) {) s
+24 57 M (43:) s
+48 57 M
+(    ) s
+24 46 M (44:) s
+48 46 M
+(    __m128i temp1, temp2, temp3;) s
+24 35 M (45:) s
+48 35 M
+(    ) s
+24 24 M (46:) s
+48 24 M
+(    temp1 = _mm_loadu_si128\( \(__m128i *\) userkey\);) s
+24 13 M (47:) s
+48 13 M
+(    temp3 = _mm_loadu_si128\( \(__m128i *\) userkey + 16\);) s
+24 2 M (48:) s
+48 2 M
+(    ) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (crypto/aes/aes.c) def
+/fdir (crypto/aes) def
+/ftail (aes.c) def
+% User defined strings:
+/fmodstr (Sat Aug 08 17:35:55 2020) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (49:) s
+48 519 M
+(    key[0] = temp1;) s
+24 508 M (50:) s
+48 508 M
+(    key[1] = temp3;) s
+24 497 M (51:) s
+48 497 M
+(    ) s
+24 486 M (52:) s
+48 486 M
+(    // Intel has some built in AES instructions and also some instrinsic functions that I'm trying to use here.) s
+24 475 M (53:) s
+48 475 M
+(    ) s
+24 464 M (54:) s
+48 464 M
+(    // this code gives me the following error:) s
+24 453 M (55:) s
+48 453 M
+(    // "'__builtin_ia32_aeskeygenassist128' needs target feature aes") s
+24 442 M (56:) s
+48 442 M
+(    // I'm using Xcode to make this, so I'm assuming I need to mess around in the build settings?) s
+24 431 M (57:) s
+48 431 M
+(    ) s
+24 420 M (58:) s
+48 420 M
+(    temp2 = _mm_aeskeygenassist_si128\(temp3, 0x01\);) s
+24 409 M (59:) s
+48 409 M
+(    KEY_256_ASSIST_1\(&temp1, &temp2\);) s
+24 398 M (60:) s
+48 398 M
+(    key[2] = temp1;) s
+24 387 M (61:) s
+48 387 M
+(    KEY_256_ASSIST_2\(&temp1, &temp3\);) s
+24 376 M (62:) s
+48 376 M
+(    key[3] = temp3;) s
+24 365 M (63:) s
+48 365 M
+(    temp2 = _mm_aeskeygenassist_si128\(temp3, 0x02\);) s
+24 354 M (64:) s
+48 354 M
+(    KEY_256_ASSIST_1\(&temp1, &temp2\);) s
+24 343 M (65:) s
+48 343 M
+(    key[4] = temp1;) s
+24 332 M (66:) s
+48 332 M
+(    KEY_256_ASSIST_2\(&temp1, &temp3\);) s
+24 321 M (67:) s
+48 321 M
+(    key[5] = temp3;) s
+24 310 M (68:) s
+48 310 M
+(    temp2 = _mm_aeskeygenassist_si128\(temp3, 0x04\);) s
+24 299 M (69:) s
+48 299 M
+(    KEY_256_ASSIST_1\(&temp1, &temp2\);) s
+24 288 M (70:) s
+48 288 M
+(    key[6] = temp1;) s
+24 277 M (71:) s
+48 277 M
+(    KEY_256_ASSIST_2\(&temp1, &temp3\);) s
+24 266 M (72:) s
+48 266 M
+(    key[7] = temp3;) s
+24 255 M (73:) s
+48 255 M
+(    temp2 = _mm_aeskeygenassist_si128\(temp3, 0x08\);) s
+24 244 M (74:) s
+48 244 M
+(    KEY_256_ASSIST_1\(&temp1, &temp2\);) s
+24 233 M (75:) s
+48 233 M
+(    key[8] = temp1;) s
+24 222 M (76:) s
+48 222 M
+(    KEY_256_ASSIST_2\(&temp1, &temp3\);) s
+24 211 M (77:) s
+48 211 M
+(    key[9] = temp3;) s
+24 200 M (78:) s
+48 200 M
+(    temp2 = _mm_aeskeygenassist_si128\(temp3, 0x010\);) s
+24 189 M (79:) s
+48 189 M
+(    KEY_256_ASSIST_1\(&temp1, &temp2\);) s
+24 178 M (80:) s
+48 178 M
+(    key[10] = temp1;) s
+24 167 M (81:) s
+48 167 M
+(    KEY_256_ASSIST_2\(&temp1, &temp3\);) s
+24 156 M (82:) s
+48 156 M
+(    key[11] = temp3;) s
+24 145 M (83:) s
+48 145 M
+(    temp2 = _mm_aeskeygenassist_si128\(temp3, 0x20\);) s
+24 134 M (84:) s
+48 134 M
+(    KEY_256_ASSIST_1\(&temp1, &temp2\);) s
+24 123 M (85:) s
+48 123 M
+(    key[12] = temp1;) s
+24 112 M (86:) s
+48 112 M
+(    KEY_256_ASSIST_2\(&temp1, &temp3\);) s
+24 101 M (87:) s
+48 101 M
+(    key[13] = temp3;) s
+24 90 M (88:) s
+48 90 M
+(    temp2 = _mm_aeskeygenassist_si128\(temp3, 0x40\);) s
+24 79 M (89:) s
+48 79 M
+(    KEY_256_ASSIST_1\(&temp1, &temp2\);) s
+24 68 M (90:) s
+48 68 M
+(    key[14] = temp1;) s
+24 57 M (91:) s
+48 57 M
+(    ) s
+24 46 M (92:) s
+48 46 M
+(}) s
+24 35 M (93:) s
+24 24 M (94:) s
+48 24 M
+(// MARK: - My Code) s
+24 13 M (95:) s
+24 2 M (96:) s
+48 2 M
+(int aesenc_block_256\(uint64_t plain_block[BLOCK_LENGTH_WORDS], const uint64_t key[KEY_LENGTH_WORDS], uint64_t ) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 3 def
+/fname (crypto/aes/aes.c) def
+/fdir (crypto/aes) def
+/ftail (aes.c) def
+% User defined strings:
+/fmodstr (Sat Aug 08 17:35:55 2020) def
+/pagenumstr (3) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+5 519 M
+(cipher_block[BLOCK_LENGTH_WORDS]\) {) s
+24 508 M (97:) s
+48 508 M
+(    ) s
+24 497 M (98:) s
+48 497 M
+(    __m128i key_schedule[KEY_LENGTH_WORDS * 15];) s
+24 486 M (99:) s
+48 486 M
+(    __m128i *feedback;) s
+18 475 M (100:) s
+48 475 M
+(    ) s
+18 464 M (101:) s
+48 464 M
+(    AES_256_Key_Expansion\(key, key_schedule\);) s
+18 453 M (102:) s
+48 453 M
+(    ) s
+18 442 M (103:) s
+48 442 M
+(    // unfinished) s
+18 431 M (104:) s
+48 431 M
+(    ) s
+18 420 M (105:) s
+48 420 M
+(    return 0;) s
+18 409 M (106:) s
+48 409 M
+(}) s
+18 398 M (107:) s
+18 387 M (108:) s
+48 387 M
+(// this uses CBC, because I don't understand GCM.) s
+18 376 M (109:) s
+48 376 M
+(int aesenc_256\(uint64_t *plaintext, const uint64_t key[KEY_LENGTH_WORDS], uint64_t *ciphertext, size_t len\) {) s
+18 365 M (110:) s
+48 365 M
+(    ) s
+18 354 M (111:) s
+48 354 M
+(    // initialize this to 0 so that the first block doesn't get wrongfully XOR'd with some junk data.) s
+18 343 M (112:) s
+48 343 M
+(    // The first block should be an IV anyway.) s
+18 332 M (113:) s
+48 332 M
+(    uint64_t previous[BLOCK_LENGTH_WORDS] = { 0, 0 };) s
+18 321 M (114:) s
+48 321 M
+(    ) s
+18 310 M (115:) s
+48 310 M
+(    while \(len--\) {) s
+18 299 M (116:) s
+48 299 M
+(        plaintext[0] ^= previous[0];) s
+18 288 M (117:) s
+48 288 M
+(        plaintext[1] ^= previous[1];) s
+18 277 M (118:) s
+48 277 M
+(        ) s
+18 266 M (119:) s
+48 266 M
+(        aesenc_block_256\(plaintext, key, ciphertext\);) s
+18 255 M (120:) s
+48 255 M
+(        ) s
+18 244 M (121:) s
+48 244 M
+(        previous[0] = ciphertext[0];) s
+18 233 M (122:) s
+48 233 M
+(        previous[1] = ciphertext[1];) s
+18 222 M (123:) s
+48 222 M
+(        ) s
+18 211 M (124:) s
+48 211 M
+(        plaintext += 2;) s
+18 200 M (125:) s
+48 200 M
+(        ciphertext += 2;) s
+18 189 M (126:) s
+48 189 M
+(    }) s
+18 178 M (127:) s
+48 178 M
+(    ) s
+18 167 M (128:) s
+48 167 M
+(    return 0;) s
+18 156 M (129:) s
+48 156 M
+(}) s
+_R
+S
+%%Page: (1) 4
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (crypto/aes/aes.h) def
+/fdir (crypto/aes) def
+/ftail (aes.h) def
+% User defined strings:
+/fmodstr (Sat Aug 08 17:36:02 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  aes.h) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 8/6/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(#ifndef aes_h) s
+24 420 M (10:) s
+48 420 M
+(#define aes_h) s
+24 409 M (11:) s
+24 398 M (12:) s
+48 398 M
+(#include <stdio.h>) s
+24 387 M (13:) s
+24 376 M (14:) s
+48 376 M
+(#include "crypto.h") s
+24 365 M (15:) s
+24 354 M (16:) s
+48 354 M
+(// MARK: - Intel Low Level AES Routines) s
+24 343 M (17:) s
+24 332 M (18:) s
+48 332 M
+(/*) s
+24 321 M (19:) s
+48 321 M
+( * All Intel Low Level AES Routines written by Intel, not me.) s
+24 310 M (20:) s
+48 310 M
+( */) s
+24 299 M (21:) s
+24 288 M (22:) s
+48 288 M
+(inline void KEY_256_ASSIST_1\(__m128i *temp1, __m128i *temp2\);) s
+24 277 M (23:) s
+24 266 M (24:) s
+48 266 M
+(inline void KEY_256_ASSIST_2\(__m128i *temp1, __m128i *temp3\);) s
+24 255 M (25:) s
+24 244 M (26:) s
+48 244 M
+(void AES_256_Key_Expansion \(const uint64_t *userkey, __m128i *key\);) s
+24 233 M (27:) s
+24 222 M (28:) s
+48 222 M
+(// MARK: - High Level AES Routines) s
+24 211 M (29:) s
+24 200 M (30:) s
+48 200 M
+(/**) s
+24 189 M (31:) s
+48 189 M
+( * Encrypts a single 128-bit block using AES with a 256 bit key) s
+24 178 M (32:) s
+48 178 M
+( *) s
+24 167 M (33:) s
+48 167 M
+( * @param plain_block An array of two 64 bit words to make one 128 bit block to be encrypted) s
+24 156 M (34:) s
+48 156 M
+( * @param key An array of 4 64 bit words to make one 256 bit key) s
+24 145 M (35:) s
+48 145 M
+( * @param cipher_block array to store the result of the encryption) s
+24 134 M (36:) s
+48 134 M
+( */) s
+24 123 M (37:) s
+48 123 M
+(int aesenc_block_256\(uint64_t plain_block[BLOCK_LENGTH_WORDS],) s
+24 112 M (38:) s
+48 112 M
+(                     const uint64_t key[KEY_LENGTH_WORDS],) s
+24 101 M (39:) s
+48 101 M
+(                     uint64_t cipher_block[KEY_LENGTH_WORDS]\);) s
+24 90 M (40:) s
+24 79 M (41:) s
+48 79 M
+(/**) s
+24 68 M (42:) s
+48 68 M
+( * @pre The plaintext is propperly padded, the first block is the IV.) s
+24 57 M (43:) s
+48 57 M
+( *) s
+24 46 M (44:) s
+48 46 M
+( * @param plaintext the data to encrypt. The first block of this data should be a random initialization vector) s
+24 35 M (45:) s
+48 35 M
+( * @param key The key for encryption) s
+24 24 M (46:) s
+48 24 M
+( * @param ciphertext where to store the result of the encryption) s
+24 13 M (47:) s
+48 13 M
+( * @param len the length of the plaintext and ciphertext in 128-bit blocks) s
+24 2 M (48:) s
+48 2 M
+( */) s
+_R
+S
+%%Page: (2) 5
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (crypto/aes/aes.h) def
+/fdir (crypto/aes) def
+/ftail (aes.h) def
+% User defined strings:
+/fmodstr (Sat Aug 08 17:36:02 2020) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (49:) s
+48 519 M
+(int aesenc_256\(uint64_t *plaintext,) s
+24 508 M (50:) s
+48 508 M
+(               const uint64_t key[KEY_LENGTH_WORDS],) s
+24 497 M (51:) s
+48 497 M
+(               uint64_t *ciphertext,) s
+24 486 M (52:) s
+48 486 M
+(               size_t len\);) s
+24 475 M (53:) s
+24 464 M (54:) s
+48 464 M
+(#endif /* aes_h */) s
+_R
+S
+%%Page: (1) 6
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (drng/drng.c) def
+/fdir (drng) def
+/ftail (drng.c) def
+% User defined strings:
+/fmodstr (Thu Aug 06 21:57:18 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  drng.c) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 8/2/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(#include "drng.h") s
+24 420 M (10:) s
+24 409 M (11:) s
+48 409 M
+(void rdrand_bytes\(unsigned char *bytes, size_t len\) {) s
+24 398 M (12:) s
+24 387 M (13:) s
+48 387 M
+(    size_t i;) s
+24 376 M (14:) s
+48 376 M
+(    unsigned long *words = \(unsigned long *\) bytes;) s
+24 365 M (15:) s
+24 354 M (16:) s
+48 354 M
+(    for \( i = 0; i < len; ++i \)) s
+24 343 M (17:) s
+48 343 M
+(        rdrand\(words++\);) s
+24 332 M (18:) s
+24 321 M (19:) s
+48 321 M
+(}) s
+24 310 M (20:) s
+24 299 M (21:) s
+48 299 M
+(int rdrand\(unsigned long *rand\) {) s
+24 288 M (22:) s
+48 288 M
+(    unsigned char ok;) s
+24 277 M (23:) s
+24 266 M (24:) s
+48 266 M
+(    asm volatile \("rdrand %0; setc %1") s
+24 255 M (25:) s
+48 255 M
+(        : "=r" \(*rand\), "=qm" \(ok\)\);) s
+24 244 M (26:) s
+24 233 M (27:) s
+48 233 M
+(    return \(int\) ok;) s
+24 222 M (28:) s
+24 211 M (29:) s
+48 211 M
+(}) s
+24 200 M (30:) s
+24 189 M (31:) s
+48 189 M
+(int rdrand_byte\(unsigned char *rand\) {) s
+24 178 M (32:) s
+48 178 M
+(    return rdrand\( \(unsigned long *\) rand \);) s
+24 167 M (33:) s
+48 167 M
+(}) s
+_R
+S
+%%Page: (1) 7
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (drng/drng.h) def
+/fdir (drng) def
+/ftail (drng.h) def
+% User defined strings:
+/fmodstr (Sun Aug 02 22:29:23 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  drng.h) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 8/2/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(/*) s
+24 420 M (10:) s
+48 420 M
+( * If the computer's processor has the RDRAND instruction, then we will use that instead of Apple's CSRNG) s
+24 409 M (11:) s
+48 409 M
+( */) s
+24 398 M (12:) s
+24 387 M (13:) s
+48 387 M
+(#ifndef drng_h) s
+24 376 M (14:) s
+48 376 M
+(#define drng_h) s
+24 365 M (15:) s
+24 354 M (16:) s
+48 354 M
+(#include <stdio.h>) s
+24 343 M (17:) s
+24 332 M (18:) s
+48 332 M
+(/**) s
+24 321 M (19:) s
+48 321 M
+( * Generates random bits that will be treated as a byte array, but the length will be treated as 64 bit words) s
+24 310 M (20:) s
+48 310 M
+( */) s
+24 299 M (21:) s
+48 299 M
+(void rdrand_bytes\(unsigned char *bytes, size_t len\);) s
+24 288 M (22:) s
+24 277 M (23:) s
+48 277 M
+(/**) s
+24 266 M (24:) s
+48 266 M
+( * Generates a random word) s
+24 255 M (25:) s
+48 255 M
+( */) s
+24 244 M (26:) s
+48 244 M
+(int rdrand\(unsigned long *rand\);) s
+24 233 M (27:) s
+24 222 M (28:) s
+48 222 M
+(/**) s
+24 211 M (29:) s
+48 211 M
+( * Generates a random byte) s
+24 200 M (30:) s
+48 200 M
+( */) s
+24 189 M (31:) s
+48 189 M
+(int rdrand_byte\(unsigned char *rand\);) s
+24 178 M (32:) s
+24 167 M (33:) s
+48 167 M
+(#endif /* drng_h */) s
+_R
+S
+%%Page: (1) 8
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (macOS/genpass/genpass/Convenience.swift) def
+/fdir (macOS/genpass/genpass) def
+/ftail (Convenience.swift) def
+% User defined strings:
+/fmodstr (Sun Aug 02 19:52:11 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  Convenience.swift) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 7/30/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(import Foundation) s
+24 420 M (10:) s
+24 409 M (11:) s
+48 409 M
+(func warning\(_ description: String\) {) s
+24 398 M (12:) s
+48 398 M
+(    // might do something different with this later, like use some unicode tricks to print it in yellow or something) s
+24 387 M (13:) s
+48 387 M
+(    print\(description\)) s
+24 376 M (14:) s
+48 376 M
+(}) s
+24 365 M (15:) s
+24 354 M (16:) s
+48 354 M
+(func error\(_ description: String? = nil, returnValue: Int32 = -1\) -> Never {) s
+24 343 M (17:) s
+48 343 M
+(    if description != nil { print\(description!\) }) s
+24 332 M (18:) s
+48 332 M
+(    advertiseUsage\(\)) s
+24 321 M (19:) s
+48 321 M
+(    exit\(returnValue\)) s
+24 310 M (20:) s
+48 310 M
+(}) s
+24 299 M (21:) s
+24 288 M (22:) s
+48 288 M
+(extension Array {) s
+24 277 M (23:) s
+48 277 M
+(    ) s
+24 266 M (24:) s
+48 266 M
+(    /**) s
+24 255 M (25:) s
+48 255 M
+(     * Safely returns a value of an array. If the value does not exist, it just returns nil. Just for convenience.) s
+24 244 M (26:) s
+48 244 M
+(     *) s
+24 233 M (27:) s
+48 233 M
+(     * I know this probably uses more code than it saves, but oh well.) s
+24 222 M (28:) s
+48 222 M
+(     */) s
+24 211 M (29:) s
+48 211 M
+(    subscript\(safe index: Int\) -> Element? {) s
+24 200 M (30:) s
+48 200 M
+(        get { self.indices.contains\(index\) ? self[index] : nil }) s
+24 189 M (31:) s
+48 189 M
+(    }) s
+24 178 M (32:) s
+48 178 M
+(    ) s
+24 167 M (33:) s
+48 167 M
+(}) s
+_R
+S
+%%Page: (1) 9
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (macOS/genpass/genpass/Generator.swift) def
+/fdir (macOS/genpass/genpass) def
+/ftail (Generator.swift) def
+% User defined strings:
+/fmodstr (Mon Aug 03 15:19:46 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  PasswordGenerator.swift) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 7/9/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(import Foundation) s
+24 420 M (10:) s
+24 409 M (11:) s
+48 409 M
+(class Generator {) s
+24 398 M (12:) s
+48 398 M
+(    ) s
+24 387 M (13:) s
+48 387 M
+(    // MARK: Properties) s
+24 376 M (14:) s
+48 376 M
+(    ) s
+24 365 M (15:) s
+48 365 M
+(    /**) s
+24 354 M (16:) s
+48 354 M
+(     * A list of characters that cannot appear in the random password) s
+24 343 M (17:) s
+48 343 M
+(     */) s
+24 332 M (18:) s
+48 332 M
+(    var forbiddenCharacters: [Character]) s
+24 321 M (19:) s
+48 321 M
+(    ) s
+24 310 M (20:) s
+48 310 M
+(    /**) s
+24 299 M (21:) s
+48 299 M
+(     * The length of the password, in characters. Default is 16) s
+24 288 M (22:) s
+48 288 M
+(     */) s
+24 277 M (23:) s
+48 277 M
+(    var passwordLength: Int) s
+24 266 M (24:) s
+48 266 M
+(    ) s
+24 255 M (25:) s
+48 255 M
+(    /**) s
+24 244 M (26:) s
+48 244 M
+(     * Wether or not the generated password should only be alphanumeric) s
+24 233 M (27:) s
+48 233 M
+(     */) s
+24 222 M (28:) s
+48 222 M
+(    var alphaNumeric: Bool = false) s
+24 211 M (29:) s
+48 211 M
+(    ) s
+24 200 M (30:) s
+48 200 M
+(    // MARK: Initializers) s
+24 189 M (31:) s
+48 189 M
+(    ) s
+24 178 M (32:) s
+48 178 M
+(    init\(excluding: [Character], ofLength length: Int = 16\) {) s
+24 167 M (33:) s
+48 167 M
+(        forbiddenCharacters = excluding) s
+24 156 M (34:) s
+48 156 M
+(        passwordLength = length) s
+24 145 M (35:) s
+48 145 M
+(    }) s
+24 134 M (36:) s
+48 134 M
+(    ) s
+24 123 M (37:) s
+48 123 M
+(    // MARK: Methods) s
+24 112 M (38:) s
+48 112 M
+(    ) s
+24 101 M (39:) s
+48 101 M
+(    /**) s
+24 90 M (40:) s
+48 90 M
+(     * Generates a random password) s
+24 79 M (41:) s
+48 79 M
+(     *) s
+24 68 M (42:) s
+48 68 M
+(     * - Parameters:) s
+24 57 M (43:) s
+48 57 M
+(     *      - password: `inout String` to hold the resulting password) s
+24 46 M (44:) s
+48 46 M
+(     *) s
+24 35 M (45:) s
+48 35 M
+(     * - Returns: Any error that occured) s
+24 24 M (46:) s
+48 24 M
+(     */) s
+24 13 M (47:) s
+48 13 M
+(    @discardableResult) s
+24 2 M (48:) s
+48 2 M
+(    func generatePassword\(_ password: inout String\) -> Int32 {) s
+_R
+S
+%%Page: (2) 10
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (macOS/genpass/genpass/Generator.swift) def
+/fdir (macOS/genpass/genpass) def
+/ftail (Generator.swift) def
+% User defined strings:
+/fmodstr (Mon Aug 03 15:19:46 2020) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (49:) s
+48 519 M
+(        ) s
+24 508 M (50:) s
+48 508 M
+(        let operation  = passwordLength.quotientAndRemainder\(dividingBy: MemoryLayout<UInt>.size\)) s
+24 497 M (51:) s
+48 497 M
+(        let wordCount  = operation.quotient + \(operation.remainder != 0 ? 1 : 0\)) s
+24 486 M (52:) s
+48 486 M
+(        ) s
+24 475 M (53:) s
+48 475 M
+(        let byteCount  = wordCount * MemoryLayout<UInt>.size) s
+24 464 M (54:) s
+48 464 M
+(        let byteBuffer = UnsafeMutablePointer<UInt8>.allocate\(capacity: byteCount\)) s
+24 453 M (55:) s
+48 453 M
+(        ) s
+24 442 M (56:) s
+48 442 M
+(        rdrand_bytes\(byteBuffer, wordCount\)) s
+24 431 M (57:) s
+48 431 M
+(        ) s
+24 420 M (58:) s
+48 420 M
+(        var bytes = Array\( UnsafeMutableBufferPointer<UInt8>\(start: byteBuffer, count: byteCount\) \)) s
+24 409 M (59:) s
+48 409 M
+(        ) s
+24 398 M (60:) s
+48 398 M
+(        // I'm worreid that my conversion from a byte to a character is not secure.) s
+24 387 M (61:) s
+48 387 M
+(        // By using the modulo operator some characters would be more likely than others.) s
+24 376 M (62:) s
+48 376 M
+(        //) s
+24 365 M (63:) s
+48 365 M
+(        // I can't think of a good way to convert the random data to a valid character) s
+24 354 M (64:) s
+48 354 M
+(        var characters: [Character] {) s
+24 343 M (65:) s
+48 343 M
+(            bytes.map {) s
+24 332 M (66:) s
+48 332 M
+(                ) s
+24 321 M (67:) s
+48 321 M
+(                if alphaNumeric {) s
+24 310 M (68:) s
+48 310 M
+(                    ) s
+24 299 M (69:) s
+48 299 M
+(                    // we are only choosing between 62 total characters, which is close to 64 characters, so we only care ) s
+5 288 M
+(about the last 6 bits of the byte.) s
+24 277 M (70:) s
+48 277 M
+(                    let bits = $0 % 62) s
+24 266 M (71:) s
+48 266 M
+(                    ) s
+24 255 M (72:) s
+48 255 M
+(                    // map the 0-61 value to a valid ascii character) s
+24 244 M (73:) s
+48 244 M
+(                    return Character\(UnicodeScalar\() s
+24 233 M (74:) s
+48 233 M
+(                        bits < 10 ? bits + 48 : \( bits < 36 ? bits + 55 : bits + 61 \)) s
+24 222 M (75:) s
+48 222 M
+(                    \)\)) s
+24 211 M (76:) s
+48 211 M
+(                    ) s
+24 200 M (77:) s
+48 200 M
+(                }) s
+24 189 M (78:) s
+48 189 M
+(                ) s
+24 178 M (79:) s
+48 178 M
+(                return Character\(UnicodeScalar\( \($0 % 90\) + 33 \)\)) s
+24 167 M (80:) s
+48 167 M
+(            }) s
+24 156 M (81:) s
+48 156 M
+(        }) s
+24 145 M (82:) s
+24 134 M (83:) s
+48 134 M
+(        if !alphaNumeric {) s
+24 123 M (84:) s
+48 123 M
+(            // make sure that, if we made any illegal characters, we fix that.) s
+24 112 M (85:) s
+48 112 M
+(            if forbiddenCharacters.count != 0 {) s
+24 101 M (86:) s
+48 101 M
+(                for i in 0..<passwordLength {) s
+24 90 M (87:) s
+48 90 M
+(                    while forbiddenCharacters.contains\(characters[i]\) {) s
+24 79 M (88:) s
+48 79 M
+(                        rdrand_byte\(&bytes[i]\)) s
+24 68 M (89:) s
+48 68 M
+(                    }) s
+24 57 M (90:) s
+48 57 M
+(                }) s
+24 46 M (91:) s
+48 46 M
+(            }) s
+24 35 M (92:) s
+48 35 M
+(        }) s
+24 24 M (93:) s
+48 24 M
+(        ) s
+24 13 M (94:) s
+48 13 M
+(        password = String\(characters[0..<passwordLength]\)) s
+24 2 M (95:) s
+48 2 M
+(        ) s
+_R
+S
+%%Page: (3) 11
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 3 def
+/fname (macOS/genpass/genpass/Generator.swift) def
+/fdir (macOS/genpass/genpass) def
+/ftail (Generator.swift) def
+% User defined strings:
+/fmodstr (Mon Aug 03 15:19:46 2020) def
+/pagenumstr (3) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (96:) s
+48 519 M
+(        return 1 // probably should do something better with this) s
+24 508 M (97:) s
+48 508 M
+(        ) s
+24 497 M (98:) s
+48 497 M
+(    }) s
+24 486 M (99:) s
+48 486 M
+(    ) s
+18 475 M (100:) s
+48 475 M
+(    /**) s
+18 464 M (101:) s
+48 464 M
+(     * Generates a random number in a given range) s
+18 453 M (102:) s
+48 453 M
+(     */) s
+18 442 M (103:) s
+48 442 M
+(    @discardableResult) s
+18 431 M (104:) s
+48 431 M
+(    func generateNumber\(_ bounds: ClosedRange<UInt>?, number: inout UInt\) -> Int32 {) s
+18 420 M (105:) s
+48 420 M
+(        ) s
+18 409 M (106:) s
+48 409 M
+(        let error = rdrand\(&number\)) s
+18 398 M (107:) s
+48 398 M
+(        ) s
+18 387 M (108:) s
+48 387 M
+(        if let range = bounds {) s
+18 376 M (109:) s
+48 376 M
+(            number %= \(range.upperBound - range.lowerBound\) + 1) s
+18 365 M (110:) s
+48 365 M
+(            number += range.lowerBound) s
+18 354 M (111:) s
+48 354 M
+(        }) s
+18 343 M (112:) s
+48 343 M
+(        ) s
+18 332 M (113:) s
+48 332 M
+(        return error) s
+18 321 M (114:) s
+48 321 M
+(        ) s
+18 310 M (115:) s
+48 310 M
+(    }) s
+18 299 M (116:) s
+48 299 M
+(    ) s
+18 288 M (117:) s
+48 288 M
+(}) s
+_R
+S
+%%Page: (1) 12
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (macOS/genpass/genpass/Usage.swift) def
+/fdir (macOS/genpass/genpass) def
+/ftail (Usage.swift) def
+% User defined strings:
+/fmodstr (Thu Aug 06 20:44:41 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  Usage.swift) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 7/30/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(import Foundation) s
+24 420 M (10:) s
+24 409 M (11:) s
+48 409 M
+(func advertiseUsage\(\) {) s
+24 398 M (12:) s
+48 398 M
+(    print\("Use genpass -h or genpass --help to see usage"\)) s
+24 387 M (13:) s
+48 387 M
+(}) s
+24 376 M (14:) s
+24 365 M (15:) s
+48 365 M
+(func printUsage\(\) {) s
+24 354 M (16:) s
+48 354 M
+(    ) s
+24 343 M (17:) s
+48 343 M
+(    print\("genpass is used to generate random passwords or random numbers using Apple's secure random number generator \(or ) s
+5 332 M
+(so they say\)"\)) s
+24 321 M (18:) s
+48 321 M
+(    print\(\)) s
+24 310 M (19:) s
+48 310 M
+(    print\(" -- Password Generation -- "\)) s
+24 299 M (20:) s
+48 299 M
+(    print\(\)) s
+24 288 M (21:) s
+48 288 M
+(    print\("Running genpass with no arguments passed in will give you a random password, 16 characters in length. Possible ) s
+5 277 M
+(characters include any non-control character in 7-bit ASCII. For example:"\)) s
+24 266 M (22:) s
+48 266 M
+(    print\(\)) s
+24 255 M (23:) s
+48 255 M
+(    print\("\\t$ genpass"\)) s
+24 244 M (24:) s
+48 244 M
+(    print\("\\tEfwL:&q\\"wx\\\\QPcN7"\)) s
+24 233 M (25:) s
+48 233 M
+(    print\(\)) s
+24 222 M (26:) s
+48 222 M
+(    print\("To specify a desired password length, pass in the lengh you want after the call to genpass. For example:"\)) s
+24 211 M (27:) s
+48 211 M
+(    print\(\)) s
+24 200 M (28:) s
+48 200 M
+(    print\("\\tgenpass 12"\)) s
+24 189 M (29:) s
+48 189 M
+(    print\(\)) s
+24 178 M (30:) s
+48 178 M
+(    print\("Will generate a random password 12 characters in length."\)) s
+24 167 M (31:) s
+48 167 M
+(    print\(\)) s
+24 156 M (32:) s
+48 156 M
+(    print\("If you want to only generate a password with alphanumeric characters, pass the -a or --alphanumeric argument."\)) s
+24 145 M (33:) s
+48 145 M
+(    print\(\)) s
+24 134 M (34:) s
+48 134 M
+(    print\("\\tgenpass -a 12"\)) s
+24 123 M (35:) s
+48 123 M
+(    print\(\)) s
+24 112 M (36:) s
+48 112 M
+(    print\("Some sites and services prohibit the use of certain characters in your password. In order to tell genpass to ) s
+5 101 M
+(not include specific characters, list all the illegal characters in a single argument following the '-x' or '--except' option. ) s
+5 90 M
+(For example:"\)) s
+24 79 M (37:) s
+48 79 M
+(    print\(\)) s
+24 68 M (38:) s
+48 68 M
+(    print\("\\tgenpass -x ~_/?!"\)) s
+24 57 M (39:) s
+48 57 M
+(    print\(\)) s
+24 46 M (40:) s
+48 46 M
+(    print\("Will give you a password that does not contain a '~', '_', '/', '?', or '!'. If you want to specify the length ) s
+5 35 M
+(of the password AND illegal characters, you must put the length before the illegal characters. This is done so that we don't ) s
+5 24 M
+(mistake the length for one of the characters you don't want to see. For example:"\)) s
+24 13 M (41:) s
+48 13 M
+(    print\(\)) s
+24 2 M (42:) s
+48 2 M
+(    print\("\\tgenpass 12 -x ~_/?!"\)) s
+_R
+S
+%%Page: (2) 13
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (macOS/genpass/genpass/Usage.swift) def
+/fdir (macOS/genpass/genpass) def
+/ftail (Usage.swift) def
+% User defined strings:
+/fmodstr (Thu Aug 06 20:44:41 2020) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (43:) s
+48 519 M
+(    print\(\)) s
+24 508 M (44:) s
+48 508 M
+(    print\("Will give you a 12 digit character without any of those characters."\)) s
+24 497 M (45:) s
+48 497 M
+(    print\(\)) s
+24 486 M (46:) s
+48 486 M
+(    print\(\)) s
+24 475 M (47:) s
+48 475 M
+(    print\(" -- Random Number Generation -- "\)) s
+24 464 M (48:) s
+48 464 M
+(    print\(\)) s
+24 453 M (49:) s
+48 453 M
+(    print\("To generate a random number instead of a password, pass the '-n' or '--number' flag:"\)) s
+24 442 M (50:) s
+48 442 M
+(    print\(\)) s
+24 431 M (51:) s
+48 431 M
+(    print\("\\t$ genpass -n"\)) s
+24 420 M (52:) s
+48 420 M
+(    print\("\\t48534859"\)) s
+24 409 M (53:) s
+48 409 M
+(    print\(\)) s
+24 398 M (54:) s
+48 398 M
+(    print\("The number will be an integer that can be represented by your machine's word length. On most modern machines, ) s
+5 387 M
+(that's 64 bits, so you'll get a number between 0 and 2^64 - 1."\)) s
+24 376 M (55:) s
+48 376 M
+(    print\(\)) s
+24 365 M (56:) s
+48 365 M
+(    print\("You can also specify a range the random number should be in. Like before, the bounds [a, b] \(where a < b\) of ) s
+5 354 M
+(this range must both be numbers that fit into one machine word \(typically 64 bits\). For example:"\)) s
+24 343 M (57:) s
+48 343 M
+(    print\(\)) s
+24 332 M (58:) s
+48 332 M
+(    print\("\\t$ genpass -n 1 10 # generates a random number between 1 and 10, inclusive"\)) s
+24 321 M (59:) s
+48 321 M
+(    print\("\\t6"\)) s
+24 310 M (60:) s
+48 310 M
+(    ) s
+24 299 M (61:) s
+48 299 M
+(}) s
+_R
+S
+%%Page: (1) 14
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (macOS/genpass/genpass/main.swift) def
+/fdir (macOS/genpass/genpass) def
+/ftail (main.swift) def
+% User defined strings:
+/fmodstr (Mon Aug 03 19:04:40 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  main.swift) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 7/9/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(import Foundation) s
+24 420 M (10:) s
+24 409 M (11:) s
+48 409 M
+(/*) s
+24 398 M (12:) s
+48 398 M
+( * Interpret User's desire) s
+24 387 M (13:) s
+48 387 M
+( */) s
+24 376 M (14:) s
+24 365 M (15:) s
+48 365 M
+(// These are just for my convenience) s
+24 354 M (16:) s
+48 354 M
+(@inlinable var argc: Int      { Int\(CommandLine.argc\) }) s
+24 343 M (17:) s
+48 343 M
+(@inlinable var args: [String] { CommandLine.arguments }) s
+24 332 M (18:) s
+24 321 M (19:) s
+48 321 M
+(let generator = Generator\(excluding: [], ofLength: 16\)) s
+24 310 M (20:) s
+24 299 M (21:) s
+24 288 M (22:) s
+48 288 M
+(if let firstParam = args[safe: 1] {) s
+24 277 M (23:) s
+48 277 M
+(    ) s
+24 266 M (24:) s
+48 266 M
+(    if firstParam == "-h" || firstParam == "--help" {) s
+24 255 M (25:) s
+48 255 M
+(        printUsage\(\)) s
+24 244 M (26:) s
+48 244 M
+(        exit\(0\)) s
+24 233 M (27:) s
+48 233 M
+(    }) s
+24 222 M (28:) s
+48 222 M
+(    ) s
+24 211 M (29:) s
+48 211 M
+(    if firstParam == "-n" || firstParam == "--number" {) s
+24 200 M (30:) s
+48 200 M
+(        ) s
+24 189 M (31:) s
+48 189 M
+(        // the user has given an option indicating that they want to generate a random number) s
+24 178 M (32:) s
+48 178 M
+(        ) s
+24 167 M (33:) s
+48 167 M
+(        var range: ClosedRange<UInt>? = nil) s
+24 156 M (34:) s
+48 156 M
+(        var number: UInt = 0) s
+24 145 M (35:) s
+48 145 M
+(        ) s
+24 134 M (36:) s
+48 134 M
+(        // the reason I'm doing nested if-let statements is so that I can give the user more information about what went ) s
+5 123 M
+(wrong,) s
+24 112 M (37:) s
+48 112 M
+(        // so I know exactly what condition failed. I know it looks ugly and unclean but I think it's worth the ease of ) s
+5 101 M
+(use until I find a better way) s
+24 90 M (38:) s
+48 90 M
+(        if let lowerBoundString = args[safe: 2] {) s
+24 79 M (39:) s
+48 79 M
+(            ) s
+24 68 M (40:) s
+48 68 M
+(            if let upperBoundString = args[safe: 3] {) s
+24 57 M (41:) s
+48 57 M
+(                ) s
+24 46 M (42:) s
+48 46 M
+(                if let lowerBound = UInt\(lowerBoundString\) {) s
+24 35 M (43:) s
+48 35 M
+(                    ) s
+24 24 M (44:) s
+48 24 M
+(                    if let upperBound = UInt\(upperBoundString\) {) s
+24 13 M (45:) s
+48 13 M
+(                        ) s
+24 2 M (46:) s
+48 2 M
+(                        guard lowerBound < upperBound else {) s
+_R
+S
+%%Page: (2) 15
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (macOS/genpass/genpass/main.swift) def
+/fdir (macOS/genpass/genpass) def
+/ftail (main.swift) def
+% User defined strings:
+/fmodstr (Mon Aug 03 19:04:40 2020) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (47:) s
+48 519 M
+(                            error\("Sorry, the lower bound must be less than the upper bound.\\n\\\(lowerBound\) is not less ) s
+5 508 M
+(than \\\(upperBound\)"\)) s
+24 497 M (48:) s
+48 497 M
+(                        }) s
+24 486 M (49:) s
+48 486 M
+(                        ) s
+24 475 M (50:) s
+48 475 M
+(                        range = lowerBound...upperBound) s
+24 464 M (51:) s
+48 464 M
+(                        ) s
+24 453 M (52:) s
+48 453 M
+(                    } else {) s
+24 442 M (53:) s
+48 442 M
+(                        error\("Sorry, \\\(upperBoundString\) could not be converted to a \\\(UInt.bitWidth\)-bit unsigned ) s
+5 431 M
+(integer."\)) s
+24 420 M (54:) s
+48 420 M
+(                    }) s
+24 409 M (55:) s
+48 409 M
+(                    ) s
+24 398 M (56:) s
+48 398 M
+(                } else {) s
+24 387 M (57:) s
+48 387 M
+(                    error\("Sorry, \\\(lowerBoundString\) could not be converted to a \\\(UInt.bitWidth\)-bit unsigned integer."\)) s
+24 376 M (58:) s
+48 376 M
+(                }) s
+24 365 M (59:) s
+48 365 M
+(                ) s
+24 354 M (60:) s
+48 354 M
+(            } else {) s
+24 343 M (61:) s
+48 343 M
+(                print\("No upper bound specified. Ignoring lower bound."\)) s
+24 332 M (62:) s
+48 332 M
+(            }) s
+24 321 M (63:) s
+48 321 M
+(            ) s
+24 310 M (64:) s
+48 310 M
+(        }) s
+24 299 M (65:) s
+24 288 M (66:) s
+48 288 M
+(        generator.generateNumber\(range, number: &number\)) s
+24 277 M (67:) s
+48 277 M
+(        print\(number\)) s
+24 266 M (68:) s
+48 266 M
+(        exit\(0\)) s
+24 255 M (69:) s
+48 255 M
+(        ) s
+24 244 M (70:) s
+48 244 M
+(    }) s
+24 233 M (71:) s
+48 233 M
+(    ) s
+24 222 M (72:) s
+48 222 M
+(    // check for alphanumeric flag) s
+24 211 M (73:) s
+48 211 M
+(    if args.contains\("-a"\) || args.contains\("--alphanumeric"\) {) s
+24 200 M (74:) s
+48 200 M
+(        ) s
+24 189 M (75:) s
+48 189 M
+(        generator.passwordLength = Int\(firstParam\) ?? 16) s
+24 178 M (76:) s
+48 178 M
+(        ) s
+24 167 M (77:) s
+48 167 M
+(        // make sure the user isn't also trying to exclude other characters as well) s
+24 156 M (78:) s
+48 156 M
+(        if args.contains\("-x"\) || args.contains\("--except"\) {) s
+24 145 M (79:) s
+48 145 M
+(            error\("You cannot exclude characters and also generate an only alphanumeric password."\)) s
+24 134 M (80:) s
+48 134 M
+(        }) s
+24 123 M (81:) s
+48 123 M
+(        ) s
+24 112 M (82:) s
+48 112 M
+(        generator.alphaNumeric = true) s
+24 101 M (83:) s
+48 101 M
+(    } else {) s
+24 90 M (84:) s
+48 90 M
+(        ) s
+24 79 M (85:) s
+48 79 M
+(        // where we will look for the user specifying illegal characters. This is usually the first parameter, UNLESS the ) s
+5 68 M
+(user has entered a password length before it.) s
+24 57 M (86:) s
+48 57 M
+(        var illegalFlagExpectedIndex = 1) s
+24 46 M (87:) s
+48 46 M
+(        ) s
+24 35 M (88:) s
+48 35 M
+(        // If the user is specifying a specific password length, then the first parameter should be that length) s
+24 24 M (89:) s
+48 24 M
+(        if let passwordLength = Int\(firstParam\) {) s
+24 13 M (90:) s
+48 13 M
+(            illegalFlagExpectedIndex += 1 // we check the NEXT argument for illegal characters, since this argument is ) s
+5 2 M
+(specifying password length) s
+_R
+S
+%%Page: (3) 16
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 3 def
+/fname (macOS/genpass/genpass/main.swift) def
+/fdir (macOS/genpass/genpass) def
+/ftail (main.swift) def
+% User defined strings:
+/fmodstr (Mon Aug 03 19:04:40 2020) def
+/pagenumstr (3) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (91:) s
+48 519 M
+(            generator.passwordLength = passwordLength) s
+24 508 M (92:) s
+48 508 M
+(        }) s
+24 497 M (93:) s
+48 497 M
+(        ) s
+24 486 M (94:) s
+48 486 M
+(        if let nextParam = args[safe: illegalFlagExpectedIndex] {) s
+24 475 M (95:) s
+48 475 M
+(            if nextParam == "-x" || nextParam == "--except" {) s
+24 464 M (96:) s
+48 464 M
+(                ) s
+24 453 M (97:) s
+48 453 M
+(                guard argc >= 2 + illegalFlagExpectedIndex else {) s
+24 442 M (98:) s
+48 442 M
+(                    error\("Sorry, you must specify some characters to forbid from being in the password. No characters ) s
+5 431 M
+(were specified after \\\(nextParam\) flag."\)) s
+24 420 M (99:) s
+48 420 M
+(                }) s
+18 409 M (100:) s
+48 409 M
+(                ) s
+18 398 M (101:) s
+48 398 M
+(                generator.forbiddenCharacters = Array\(args[1 + illegalFlagExpectedIndex]\)) s
+18 387 M (102:) s
+48 387 M
+(                ) s
+18 376 M (103:) s
+48 376 M
+(            } else {) s
+18 365 M (104:) s
+48 365 M
+(                error\("Unrecognized option \\\(nextParam\)"\)) s
+18 354 M (105:) s
+48 354 M
+(            }) s
+18 343 M (106:) s
+48 343 M
+(        }) s
+18 332 M (107:) s
+48 332 M
+(    }) s
+18 321 M (108:) s
+48 321 M
+(}) s
+18 310 M (109:) s
+18 299 M (110:) s
+48 299 M
+(var password: String = "") s
+18 288 M (111:) s
+18 277 M (112:) s
+48 277 M
+(generator.generatePassword\(&password\)) s
+18 266 M (113:) s
+18 255 M (114:) s
+48 255 M
+(print\(password\)) s
+18 244 M (115:) s
+_R
+S
+%%Page: (1) 17
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (pc-linux/genpass.c) def
+/fdir (pc-linux) def
+/ftail (genpass.c) def
+% User defined strings:
+/fmodstr (Tue Aug 04 22:53:53 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  genpass.c) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 8/3/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(#include "genpass.h") s
+24 420 M (10:) s
+24 409 M (11:) s
+48 409 M
+(int genpass\(unsigned char *pass, int passlen, unsigned char *forbidden_chars, int alphanum\) {) s
+24 398 M (12:) s
+48 398 M
+(    // find how many words we need to generate) s
+24 387 M (13:) s
+48 387 M
+(    int i, wordcount = \(passlen / sizeof\(size_t\)\) + \(passlen % sizeof\(size_t\) ? 1 : 0\);) s
+24 376 M (14:) s
+48 376 M
+(    rdrand_bytes\(pass, wordcount\);) s
+24 365 M (15:) s
+24 354 M (16:) s
+48 354 M
+(    if \(alphanum\) {) s
+24 343 M (17:) s
+24 332 M (18:) s
+48 332 M
+(        for \( i = 0; i < passlen; ++i \) {) s
+24 321 M (19:) s
+48 321 M
+(            pass[i] %= 62;) s
+24 310 M (20:) s
+24 299 M (21:) s
+48 299 M
+(            if \(pass[i] < 10\) {) s
+24 288 M (22:) s
+48 288 M
+(                pass[i] += 48;) s
+24 277 M (23:) s
+48 277 M
+(            } else if \(pass[i] < 36\) {) s
+24 266 M (24:) s
+48 266 M
+(                pass[i] += 55;) s
+24 255 M (25:) s
+48 255 M
+(            } else {) s
+24 244 M (26:) s
+48 244 M
+(                pass[i] += 61;) s
+24 233 M (27:) s
+48 233 M
+(            }) s
+24 222 M (28:) s
+48 222 M
+(        }) s
+24 211 M (29:) s
+24 200 M (30:) s
+48 200 M
+(    } else {) s
+24 189 M (31:) s
+24 178 M (32:) s
+48 178 M
+(        for \( i = 0; i < passlen; ++i \) {) s
+24 167 M (33:) s
+48 167 M
+(            while \(isIllegal\(BYTE_TO_ASCII_CHAR\(pass[i]\), forbidden_chars\)\)) s
+24 156 M (34:) s
+48 156 M
+(                rdrand_byte\(pass + i\); // should I just use &pass[i] instead?) s
+24 145 M (35:) s
+24 134 M (36:) s
+48 134 M
+(            pass[i] %= 90;) s
+24 123 M (37:) s
+48 123 M
+(            pass[i] += 33;) s
+24 112 M (38:) s
+48 112 M
+(        }) s
+24 101 M (39:) s
+24 90 M (40:) s
+48 90 M
+(    }) s
+24 79 M (41:) s
+24 68 M (42:) s
+48 68 M
+(    // null terminate string) s
+24 57 M (43:) s
+48 57 M
+(    pass[passlen] = 0;) s
+24 46 M (44:) s
+24 35 M (45:) s
+48 35 M
+(    return 1;) s
+24 24 M (46:) s
+24 13 M (47:) s
+48 13 M
+(}) s
+24 2 M (48:) s
+_R
+S
+%%Page: (2) 18
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (pc-linux/genpass.c) def
+/fdir (pc-linux) def
+/ftail (genpass.c) def
+% User defined strings:
+/fmodstr (Tue Aug 04 22:53:53 2020) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (49:) s
+48 519 M
+(int randnum\(unsigned long *num, unsigned long lower, unsigned long upper\) {) s
+24 508 M (50:) s
+24 497 M (51:) s
+48 497 M
+(    int err = rdrand\(num\);) s
+24 486 M (52:) s
+24 475 M (53:) s
+48 475 M
+(    *num %= upper - lower + 1;) s
+24 464 M (54:) s
+48 464 M
+(    *num += lower;) s
+24 453 M (55:) s
+24 442 M (56:) s
+48 442 M
+(    return err;) s
+24 431 M (57:) s
+24 420 M (58:) s
+48 420 M
+(}) s
+24 409 M (59:) s
+24 398 M (60:) s
+48 398 M
+(int isIllegal\(unsigned char c, unsigned char *forbidden_chars\) {) s
+24 387 M (61:) s
+48 387 M
+(    for \( ; *forbidden_chars != 0; ++forbidden_chars \)) s
+24 376 M (62:) s
+48 376 M
+(        if \(c == *forbidden_chars\)) s
+24 365 M (63:) s
+48 365 M
+(            return 1;) s
+24 354 M (64:) s
+48 354 M
+(    return 0;) s
+24 343 M (65:) s
+48 343 M
+(}) s
+_R
+S
+%%Page: (1) 19
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (pc-linux/genpass.h) def
+/fdir (pc-linux) def
+/ftail (genpass.h) def
+% User defined strings:
+/fmodstr (Mon Aug 03 19:22:42 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  genpass.h) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 8/3/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(#ifndef genpass_h) s
+24 420 M (10:) s
+48 420 M
+(#define genpass_h) s
+24 409 M (11:) s
+24 398 M (12:) s
+48 398 M
+(#include "../drng/drng.h") s
+24 387 M (13:) s
+24 376 M (14:) s
+48 376 M
+(#define BYTE_TO_ASCII_CHAR\(b\) \( \(b % 90\) + 33 \)) s
+24 365 M (15:) s
+24 354 M (16:) s
+48 354 M
+(/**) s
+24 343 M (17:) s
+48 343 M
+( * Generates a random password of a specified length) s
+24 332 M (18:) s
+48 332 M
+( */) s
+24 321 M (19:) s
+48 321 M
+(int genpass\(unsigned char *pass, int passlen, unsigned char *forbidden_chars, int alphanum\);) s
+24 310 M (20:) s
+24 299 M (21:) s
+48 299 M
+(/**) s
+24 288 M (22:) s
+48 288 M
+( * Generates a random number in a given range) s
+24 277 M (23:) s
+48 277 M
+( */) s
+24 266 M (24:) s
+48 266 M
+(int randnum\(unsigned long *num, unsigned long lower, unsigned long upper\);) s
+24 255 M (25:) s
+24 244 M (26:) s
+48 244 M
+(/**) s
+24 233 M (27:) s
+48 233 M
+( * Checks whether a character is forbidden) s
+24 222 M (28:) s
+48 222 M
+( */) s
+24 211 M (29:) s
+48 211 M
+(int isIllegal\(unsigned char c, unsigned char *forbidden_chars\);) s
+24 200 M (30:) s
+24 189 M (31:) s
+48 189 M
+(#endif) s
+_R
+S
+%%Page: (1) 20
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (pc-linux/main.c) def
+/fdir (pc-linux) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Tue Aug 04 22:53:18 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  main.c) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 8/3/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(#include <string.h>) s
+24 420 M (10:) s
+48 420 M
+(#include <stdlib.h>) s
+24 409 M (11:) s
+48 409 M
+(#include <stdio.h>) s
+24 398 M (12:) s
+24 387 M (13:) s
+48 387 M
+(#include "utility.h") s
+24 376 M (14:) s
+48 376 M
+(#include "genpass.h") s
+24 365 M (15:) s
+24 354 M (16:) s
+48 354 M
+(int main\(int argc, char const *argv[]\)) s
+24 343 M (17:) s
+48 343 M
+({) s
+24 332 M (18:) s
+48 332 M
+(    int passlen = 16;) s
+24 321 M (19:) s
+48 321 M
+(    int alphnum = 0;) s
+24 310 M (20:) s
+24 299 M (21:) s
+48 299 M
+(    // the argument index we expect to see the first option flag, be it -a or -x) s
+24 288 M (22:) s
+48 288 M
+(    int expectedFlagIndex = 1;) s
+24 277 M (23:) s
+24 266 M (24:) s
+48 266 M
+(    unsigned long num, lower, upper;) s
+24 255 M (25:) s
+24 244 M (26:) s
+48 244 M
+(    unsigned char *pass;) s
+24 233 M (27:) s
+48 233 M
+(    unsigned char *forbidden_chars = \(unsigned char *\) "";) s
+24 222 M (28:) s
+24 211 M (29:) s
+48 211 M
+(    lower = 0;) s
+24 200 M (30:) s
+48 200 M
+(    upper = ~lower;) s
+24 189 M (31:) s
+24 178 M (32:) s
+48 178 M
+(    // I. hate. handling. user. input.) s
+24 167 M (33:) s
+24 156 M (34:) s
+48 156 M
+(    if \(argc > 1\) {) s
+24 145 M (35:) s
+24 134 M (36:) s
+48 134 M
+(        // if one of them is zero, then we just multiplly them and the output should be 0) s
+24 123 M (37:) s
+48 123 M
+(        if \(strcmp\("-h", argv[1]\) * strcmp\("--help", argv[1]\) == 0\) {) s
+24 112 M (38:) s
+48 112 M
+(            print_usage\(\);) s
+24 101 M (39:) s
+48 101 M
+(            exit\(0\);) s
+24 90 M (40:) s
+48 90 M
+(        }) s
+24 79 M (41:) s
+24 68 M (42:) s
+48 68 M
+(        if \(strcmp\("-h", argv[1]\) * strcmp\("--number", argv[1]\) == 0\) {) s
+24 57 M (43:) s
+24 46 M (44:) s
+48 46 M
+(            if \(argc == 4\) {) s
+24 35 M (45:) s
+24 24 M (46:) s
+48 24 M
+(                // I'll add error checking later. Unconveniently, strtoul returns 0 if there is an error, but 0 is a valid ) s
+5 13 M
+(value for the range, so I'll have to be creative.) s
+24 2 M (47:) s
+48 2 M
+(                lower = strtoul\(argv[2], NULL, strlen\(argv[2]\)\);) s
+_R
+S
+%%Page: (2) 21
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (pc-linux/main.c) def
+/fdir (pc-linux) def
+/ftail (main.c) def
+% User defined strings:
+/fmodstr (Tue Aug 04 22:53:18 2020) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (48:) s
+48 519 M
+(                upper = strtoul\(argv[2], NULL, strlen\(argv[2]\)\);) s
+24 508 M (49:) s
+24 497 M (50:) s
+48 497 M
+(                if \(upper < lower\)) s
+24 486 M (51:) s
+48 486 M
+(                    error\("The upper bound must be greater than or equal to the lower bound.", -1\);) s
+24 475 M (52:) s
+24 464 M (53:) s
+48 464 M
+(            }) s
+24 453 M (54:) s
+24 442 M (55:) s
+48 442 M
+(            randnum\(&num, lower, upper\);) s
+24 431 M (56:) s
+48 431 M
+(            printf\("%lu\\n", num\);) s
+24 420 M (57:) s
+48 420 M
+(            exit\(0\);) s
+24 409 M (58:) s
+24 398 M (59:) s
+48 398 M
+(        }) s
+24 387 M (60:) s
+24 376 M (61:) s
+48 376 M
+(        if \( \(passlen = atoi\(argv[1]\)\) \)) s
+24 365 M (62:) s
+48 365 M
+(            expectedFlagIndex++;) s
+24 354 M (63:) s
+48 354 M
+(        else) s
+24 343 M (64:) s
+48 343 M
+(            passlen = 16;) s
+24 332 M (65:) s
+24 321 M (66:) s
+24 310 M (67:) s
+48 310 M
+(        if \(expectedFlagIndex < argc\) {) s
+24 299 M (68:) s
+48 299 M
+(            if \( strcmp\(argv[expectedFlagIndex], "-a"\) * strcmp\(argv[expectedFlagIndex], "--alphanumeric"\) == 0 \) {) s
+24 288 M (69:) s
+48 288 M
+(                alphnum = 1;) s
+24 277 M (70:) s
+48 277 M
+(            } else if \( strcmp\(argv[expectedFlagIndex], "-x"\) * strcmp\(argv[expectedFlagIndex], "--except"\) == 0 \) {) s
+24 266 M (71:) s
+24 255 M (72:) s
+48 255 M
+(                if \(argc < expectedFlagIndex + 2\)) s
+24 244 M (73:) s
+48 244 M
+(                    error\("Please enter some evil characters to exclude.", -1\);) s
+24 233 M (74:) s
+24 222 M (75:) s
+48 222 M
+(                forbidden_chars = \(unsigned char *\) argv[expectedFlagIndex + 1];) s
+24 211 M (76:) s
+48 211 M
+(            } else {) s
+24 200 M (77:) s
+48 200 M
+(                error\( "Unrecognized argument.", -1 \);) s
+24 189 M (78:) s
+48 189 M
+(            }) s
+24 178 M (79:) s
+48 178 M
+(        }) s
+24 167 M (80:) s
+24 156 M (81:) s
+48 156 M
+(    }) s
+24 145 M (82:) s
+24 134 M (83:) s
+48 134 M
+(    pass = \(unsigned char *\) malloc\(passlen + 1\);) s
+24 123 M (84:) s
+24 112 M (85:) s
+48 112 M
+(    genpass\(pass, passlen, forbidden_chars, alphnum\);) s
+24 101 M (86:) s
+24 90 M (87:) s
+48 90 M
+(    printf\("%s\\n", pass\);) s
+24 79 M (88:) s
+24 68 M (89:) s
+48 68 M
+(    return 0;) s
+24 57 M (90:) s
+48 57 M
+(}) s
+_R
+S
+%%Page: (1) 22
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (pc-linux/utility.c) def
+/fdir (pc-linux) def
+/ftail (utility.c) def
+% User defined strings:
+/fmodstr (Mon Aug 03 19:27:38 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  utility.c) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 8/3/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(#include "utility.h") s
+24 420 M (10:) s
+24 409 M (11:) s
+48 409 M
+(void error\(char *description, int ecode\) {) s
+24 398 M (12:) s
+48 398 M
+(    printf\("Error: %s\\n", description\);) s
+24 387 M (13:) s
+48 387 M
+(    advertise_usage\(\);) s
+24 376 M (14:) s
+48 376 M
+(    exit\(ecode\);) s
+24 365 M (15:) s
+48 365 M
+(}) s
+24 354 M (16:) s
+24 343 M (17:) s
+48 343 M
+(void advertise_usage\(\) {) s
+24 332 M (18:) s
+48 332 M
+(    printf\("Use genpass -h or genpass --help to see usage\\n"\);) s
+24 321 M (19:) s
+48 321 M
+(}) s
+24 310 M (20:) s
+24 299 M (21:) s
+48 299 M
+(void print_usage\(\) {) s
+24 288 M (22:) s
+24 277 M (23:) s
+48 277 M
+(    printf\("genpass is used to generate random passwords or random numbers using Apple's secure random number generator ) s
+5 266 M
+(\(or so they say\)"\);) s
+24 255 M (24:) s
+48 255 M
+(    printf\("\\n"\);) s
+24 244 M (25:) s
+48 244 M
+(    printf\(" -- Password Generation -- "\);) s
+24 233 M (26:) s
+48 233 M
+(    printf\("\\n"\);) s
+24 222 M (27:) s
+48 222 M
+(    printf\("Running genpass with no arguments passed in will give you a random password, 16 characters in length. Possible ) s
+5 211 M
+(characters include any non-control character in 7-bit ASCII. For example:"\);) s
+24 200 M (28:) s
+48 200 M
+(    printf\("\\n"\);) s
+24 189 M (29:) s
+48 189 M
+(    printf\("\\t$ genpass"\);) s
+24 178 M (30:) s
+48 178 M
+(    printf\("\\tEfwL:&q\\"wx\\\\QPcN7"\);) s
+24 167 M (31:) s
+48 167 M
+(    printf\("\\n"\);) s
+24 156 M (32:) s
+48 156 M
+(    printf\("To specify a desired password length, pass in the lengh you want after the call to genpass. For example:"\);) s
+24 145 M (33:) s
+48 145 M
+(    printf\("\\n"\);) s
+24 134 M (34:) s
+48 134 M
+(    printf\("\\tgenpass 12"\);) s
+24 123 M (35:) s
+48 123 M
+(    printf\("\\n"\);) s
+24 112 M (36:) s
+48 112 M
+(    printf\("Will generate a random password 12 characters in length."\);) s
+24 101 M (37:) s
+48 101 M
+(    printf\("\\n"\);) s
+24 90 M (38:) s
+48 90 M
+(    printf\("If you want to only generate a password with alphanumeric characters, pass the -a or --alphanumeric ) s
+5 79 M
+(argument."\);) s
+24 68 M (39:) s
+48 68 M
+(    printf\("\\n"\);) s
+24 57 M (40:) s
+48 57 M
+(    printf\("\\tgenpass -a 12"\);) s
+24 46 M (41:) s
+48 46 M
+(    printf\("\\n"\);) s
+24 35 M (42:) s
+48 35 M
+(    printf\("Some sites and services prohibit the use of certain characters in your password. In order to tell genpass to ) s
+5 24 M
+(not include specific characters, list all the illegal characters in a single argument following the '-x' or '--except' option. ) s
+5 13 M
+(For example:"\);) s
+24 2 M (43:) s
+48 2 M
+(    printf\("\\n"\);) s
+_R
+S
+%%Page: (2) 23
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (pc-linux/utility.c) def
+/fdir (pc-linux) def
+/ftail (utility.c) def
+% User defined strings:
+/fmodstr (Mon Aug 03 19:27:38 2020) def
+/pagenumstr (2) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+24 519 M (44:) s
+48 519 M
+(    printf\("\\tgenpass -x ~_/?!"\);) s
+24 508 M (45:) s
+48 508 M
+(    printf\("\\n"\);) s
+24 497 M (46:) s
+48 497 M
+(    printf\("Will give you a password that does not contain a '~', '_', '/', '?', or '!'. If you want to specify the length ) s
+5 486 M
+(of the password AND illegal characters, you must put the length before the illegal characters. This is done so that we don't ) s
+5 475 M
+(mistake the length for one of the characters you don't want to see. For example:"\);) s
+24 464 M (47:) s
+48 464 M
+(    printf\("\\n"\);) s
+24 453 M (48:) s
+48 453 M
+(    printf\("\\tgenpass 12 -x ~_/?!"\);) s
+24 442 M (49:) s
+48 442 M
+(    printf\("\\n"\);) s
+24 431 M (50:) s
+48 431 M
+(    printf\("Will give you a 12 digit character without any of those characters."\);) s
+24 420 M (51:) s
+48 420 M
+(    printf\("\\n"\);) s
+24 409 M (52:) s
+48 409 M
+(    printf\("\\n"\);) s
+24 398 M (53:) s
+48 398 M
+(    printf\(" -- Random Number Generation -- "\);) s
+24 387 M (54:) s
+48 387 M
+(    printf\("\\n"\);) s
+24 376 M (55:) s
+48 376 M
+(    printf\("To generate a random number instead of a password, pass the '-n' or '--number' flag:"\);) s
+24 365 M (56:) s
+48 365 M
+(    printf\("\\n"\);) s
+24 354 M (57:) s
+48 354 M
+(    printf\("\\t$ genpass -n"\);) s
+24 343 M (58:) s
+48 343 M
+(    printf\("\\t48534859"\);) s
+24 332 M (59:) s
+48 332 M
+(    printf\("\\n"\);) s
+24 321 M (60:) s
+48 321 M
+(    printf\("The number will be an integer that can be represented by your machine's word length. On most modern machines, ) s
+5 310 M
+(that's 64 bits, so you'll get a number between 0 and 2^64 - 1."\);) s
+24 299 M (61:) s
+48 299 M
+(    printf\("\\n"\);) s
+24 288 M (62:) s
+48 288 M
+(    printf\("You can also specify a range the random number should be in. Like before, the bounds [a, b] \(where a < b\) of ) s
+5 277 M
+(this range must both be numbers that fit into one machine word \(typically 64 bits\). For example:"\);) s
+24 266 M (63:) s
+48 266 M
+(    printf\("\\n"\);) s
+24 255 M (64:) s
+48 255 M
+(    printf\("\\t$ genpass -n 1 10 # generates a random number between 1 and 10, inclusive"\);) s
+24 244 M (65:) s
+48 244 M
+(    printf\("\\t6"\);) s
+24 233 M (66:) s
+24 222 M (67:) s
+48 222 M
+(}) s
+_R
+S
+%%Page: (1) 24
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (pc-linux/utility.h) def
+/fdir (pc-linux) def
+/ftail (utility.h) def
+% User defined strings:
+/fmodstr (Mon Aug 03 23:13:27 2020) def
+/pagenumstr (1) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+do_header
+30 519 M (1:) s
+48 519 M
+(//) s
+30 508 M (2:) s
+48 508 M
+(//  utility.h) s
+30 497 M (3:) s
+48 497 M
+(//  genpass) s
+30 486 M (4:) s
+48 486 M
+(//) s
+30 475 M (5:) s
+48 475 M
+(//  Created by Sylvan Martin on 8/3/20.) s
+30 464 M (6:) s
+48 464 M
+(//  Copyright \302\251 2020 Sylvan Martin. All rights reserved.) s
+30 453 M (7:) s
+48 453 M
+(//) s
+30 442 M (8:) s
+30 431 M (9:) s
+48 431 M
+(#ifndef utility_h) s
+24 420 M (10:) s
+48 420 M
+(#define utility_h) s
+24 409 M (11:) s
+24 398 M (12:) s
+48 398 M
+(#include <stdlib.h>) s
+24 387 M (13:) s
+48 387 M
+(#include <stdio.h>) s
+24 376 M (14:) s
+24 365 M (15:) s
+48 365 M
+(void error\(char *description, int ecode\);) s
+24 354 M (16:) s
+24 343 M (17:) s
+48 343 M
+(void advertise_usage\(\);) s
+24 332 M (18:) s
+24 321 M (19:) s
+48 321 M
+(void print_usage\(\);) s
+24 310 M (20:) s
+24 299 M (21:) s
+48 299 M
+(#endif) s
+_R
+S
+%%Trailer
+%%Pages: 24
+%%DocumentNeededResources: font Courier-Bold Courier 
+%%EOF

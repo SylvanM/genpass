@@ -15,6 +15,7 @@ int genpass(unsigned char *pass, int passlen, unsigned char *forbidden_chars, in
 
     if (alphanum) {
 
+        // this "maps" the random number to another number that represents a valid ascii character.
         for ( i = 0; i < passlen; ++i ) {
             pass[i] %= 62;
 

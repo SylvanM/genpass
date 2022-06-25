@@ -3,3 +3,4 @@
 //
 
 #include "drng.h"
+#include "crypto.h"

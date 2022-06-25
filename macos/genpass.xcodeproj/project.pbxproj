@@ -12,6 +12,8 @@
 		AE6A265B24D7B0DE00CE3401 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265324D7B0DE00CE3401 /* Convenience.swift */; };
 		AE6A265C24D7B0DE00CE3401 /* Usage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265424D7B0DE00CE3401 /* Usage.swift */; };
 		AE6A266124D8A5BE00CE3401 /* drng.c in Sources */ = {isa = PBXBuildFile; fileRef = AE6A265F24D8A5BE00CE3401 /* drng.c */; };
+		AE6A266624DC6A7000CE3401 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = AE6A266524DC6A7000CE3401 /* aes.c */; };
+		AE6A266924DC6A8400CE3401 /* crypto.c in Sources */ = {isa = PBXBuildFile; fileRef = AE6A266824DC6A8400CE3401 /* crypto.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +36,10 @@
 		AE6A265E24D7B10900CE3401 /* genpass-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "genpass-Bridging-Header.h"; sourceTree = "<group>"; };
 		AE6A265F24D8A5BE00CE3401 /* drng.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = drng.c; path = ../../../drng/drng.c; sourceTree = "<group>"; };
 		AE6A266024D8A5BE00CE3401 /* drng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = drng.h; path = ../../../drng/drng.h; sourceTree = "<group>"; };
+		AE6A266424DC6A7000CE3401 /* aes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		AE6A266524DC6A7000CE3401 /* aes.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = aes.c; sourceTree = "<group>"; };
+		AE6A266724DC6A8400CE3401 /* crypto.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = crypto.h; sourceTree = "<group>"; };
+		AE6A266824DC6A8400CE3401 /* crypto.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = crypto.c; sourceTree = "<group>"; };
 		AE75766E24B762A60098CEF8 /* genpass */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genpass; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -48,14 +54,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AE6A265124D7B0DE00CE3401 /* Swift Interface */ = {
+		AE6A265124D7B0DE00CE3401 /* genpass */ = {
 			isa = PBXGroup;
 			children = (
+				AE6A265024D7B0DD00CE3401 /* main.swift */,
 				AE6A265224D7B0DE00CE3401 /* Generator.swift */,
 				AE6A265324D7B0DE00CE3401 /* Convenience.swift */,
 				AE6A265424D7B0DE00CE3401 /* Usage.swift */,
 			);
-			path = "Swift Interface";
+			path = genpass;
 			sourceTree = "<group>";
 		};
 		AE6A265624D7B0DE00CE3401 /* drng */ = {
@@ -65,6 +72,26 @@
 				AE6A266024D8A5BE00CE3401 /* drng.h */,
 			);
 			path = drng;
+			sourceTree = "<group>";
+		};
+		AE6A266224DC6A6100CE3401 /* crypto */ = {
+			isa = PBXGroup;
+			children = (
+				AE6A266324DC6A6100CE3401 /* aes */,
+				AE6A266724DC6A8400CE3401 /* crypto.h */,
+				AE6A266824DC6A8400CE3401 /* crypto.c */,
+			);
+			name = crypto;
+			path = ../../crypto;
+			sourceTree = "<group>";
+		};
+		AE6A266324DC6A6100CE3401 /* aes */ = {
+			isa = PBXGroup;
+			children = (
+				AE6A266424DC6A7000CE3401 /* aes.h */,
+				AE6A266524DC6A7000CE3401 /* aes.c */,
+			);
+			path = aes;
 			sourceTree = "<group>";
 		};
 		AE75766524B762A60098CEF8 = {
@@ -87,9 +114,9 @@
 			isa = PBXGroup;
 			children = (
 				AE6A265E24D7B10900CE3401 /* genpass-Bridging-Header.h */,
-				AE6A265024D7B0DD00CE3401 /* main.swift */,
+				AE6A266224DC6A6100CE3401 /* crypto */,
 				AE6A265624D7B0DE00CE3401 /* drng */,
-				AE6A265124D7B0DE00CE3401 /* Swift Interface */,
+				AE6A265124D7B0DE00CE3401 /* genpass */,
 			);
 			path = genpass;
 			sourceTree = "<group>";
@@ -121,7 +148,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1160;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Sylvan Martin";
 				TargetAttributes = {
 					AE75766D24B762A60098CEF8 = {
@@ -155,7 +182,9 @@
 			files = (
 				AE6A266124D8A5BE00CE3401 /* drng.c in Sources */,
 				AE6A265924D7B0DE00CE3401 /* main.swift in Sources */,
+				AE6A266924DC6A8400CE3401 /* crypto.c in Sources */,
 				AE6A265B24D7B0DE00CE3401 /* Convenience.swift in Sources */,
+				AE6A266624DC6A7000CE3401 /* aes.c in Sources */,
 				AE6A265A24D7B0DE00CE3401 /* Generator.swift in Sources */,
 				AE6A265C24D7B0DE00CE3401 /* Usage.swift in Sources */,
 			);
@@ -190,12 +219,14 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLANG_X86_VECTOR_INSTRUCTIONS = sse4.1;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -250,12 +281,14 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLANG_X86_VECTOR_INSTRUCTIONS = sse4.1;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -280,11 +313,14 @@
 		AE75767624B762A60098CEF8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_X86_VECTOR_INSTRUCTIONS = msse4.1;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JDSTZ7K2MV;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_VERSION = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -300,11 +336,14 @@
 		AE75767724B762A60098CEF8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_X86_VECTOR_INSTRUCTIONS = msse4.1;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JDSTZ7K2MV;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_VERSION = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

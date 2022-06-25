@@ -14,6 +14,7 @@
 #define drng_h
 
 #include <stdio.h>
+#include <immintrin.h>
 
 /**
  * Generates random bits that will be treated as a byte array, but the length will be treated as 64 bit words

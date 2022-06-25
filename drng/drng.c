@@ -21,8 +21,7 @@ void rdrand_bytes(unsigned char *bytes, size_t len) {
 int rdrand(unsigned long *rand) {
     unsigned char ok;
 
-    asm volatile ("rdrand %0; setc %1"
-        : "=r" (*rand), "=qm" (ok));
+    _rdrand64_step(<#unsigned long long *__p#>)
 
     return (int) ok;
 
