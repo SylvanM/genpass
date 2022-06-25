@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CommonCrypto
 
 class Generator {
     
@@ -53,7 +54,11 @@ class Generator {
         let byteCount  = wordCount * MemoryLayout<UInt>.size
         let byteBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: byteCount)
         
-        rdrand_bytes(byteBuffer, wordCount)
+        let err = SecRandomCopyBytes(kSecRandomDefault, byteCount, byteBuffer)
+        
+        if err != errSecSuccess {
+            return err
+        }
         
         var bytes = Array( UnsafeMutableBufferPointer<UInt8>(start: byteBuffer, count: byteCount) )
         
@@ -85,7 +90,7 @@ class Generator {
             if forbiddenCharacters.count != 0 {
                 for i in 0..<passwordLength {
                     while forbiddenCharacters.contains(characters[i]) {
-                        rdrand_byte(&bytes[i])
+                        generateRandomByte(&bytes[i])
                     }
                 }
             }
@@ -93,7 +98,7 @@ class Generator {
         
         password = String(characters[0..<passwordLength])
         
-        return 1 // probably should do something better with this
+        return err 
         
     }
     
@@ -103,7 +108,7 @@ class Generator {
     @discardableResult
     func generateNumber(_ bounds: ClosedRange<UInt>?, number: inout UInt) -> Int32 {
         
-        let error = rdrand(&number)
+        let error = SecRandomCopyBytes(kSecRandomDefault, MemoryLayout<UInt>.size, &number)
         
         if let range = bounds {
             number %= (range.upperBound - range.lowerBound) + 1
@@ -112,6 +117,14 @@ class Generator {
         
         return error
         
+    }
+    
+    /**
+     * Generates a single random byte
+     */
+    @discardableResult
+    func generateRandomByte(_ result: UnsafeMutablePointer<UInt8>) -> Int32 {
+        SecRandomCopyBytes(kSecRandomDefault, 1, result)
     }
     
 }
